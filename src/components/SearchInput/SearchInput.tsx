@@ -2,6 +2,7 @@ import { ChangeEvent, Component } from 'react';
 import './SearchInput.css';
 
 type SearchProps = {
+  value: string,
   onSearch: (query: string) => void;
 };
 
@@ -9,13 +10,10 @@ type SearchState = {
   value: string,
 };
 
-const searchQueryKey = 'searchQuery';
-
 class SearchInput extends Component<SearchProps, SearchState> {
   constructor(props: SearchProps) {
     super(props);
-    const query = localStorage.getItem(searchQueryKey);
-    this.state = { value: query ?? '' };
+    this.state = { value: props.value };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -26,7 +24,6 @@ class SearchInput extends Component<SearchProps, SearchState> {
   }
 
   handleClick() {
-    localStorage.setItem(searchQueryKey, this.state.value);
     this.props.onSearch(this.state.value);
   }
 
