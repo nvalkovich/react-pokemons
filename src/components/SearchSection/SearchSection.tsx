@@ -27,7 +27,7 @@ class SearchSection extends Component<object, SearchSectionState> {
   }
 
   async componentDidMount() {
-      await this.handleSearch(this.state.searchQuery);
+    await this.handleSearch(this.state.searchQuery);
   }
 
   async handleSearch(searchQuery: string) {
