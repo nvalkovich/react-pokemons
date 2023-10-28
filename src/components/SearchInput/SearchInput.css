@@ -1,0 +1,14 @@
+.input,
+.btn {
+  height: 30px;
+  padding: 5px;
+}
+
+.input {
+  width: 400px;
+}
+
+.btn {
+  margin-left: 5px;
+  width: 60px;
+}
