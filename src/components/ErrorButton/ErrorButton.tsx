@@ -14,7 +14,7 @@ class ErrorButton extends Component<object, ErrorButtonState> {
 
   handleClick = () => {
     this.setState({ isError: true });
-  }
+  };
 
   render() {
     if (this.state.isError) {

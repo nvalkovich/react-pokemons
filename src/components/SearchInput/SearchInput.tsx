@@ -9,31 +9,53 @@ type SearchProps = {
 
 type SearchState = {
   value: string;
+  validationMessage: string | null;
 };
 
 class SearchInput extends Component<SearchProps, SearchState> {
+  private validationRegExp: RegExp;
+
   constructor(props: SearchProps) {
     super(props);
-    this.state = { value: props.value };
+    this.state = {
+      value: props.value,
+      validationMessage: null,
+    };
+    this.validationRegExp = /^[0-9a-zA-Z\s]+$/;
   }
 
   handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    this.setState({ value: event.target.value });
-  }
+    this.setState({ value: event.target.value, validationMessage: null });
+  };
 
   handleClick = () => {
+    if (!this.state.value.match(this.validationRegExp) && this.state.value) {
+      this.setState({
+        validationMessage:
+          'Invalid search request. Please, use Latin characters',
+      });
+      return;
+    }
+
     this.props.onSearch(this.state.value);
-  }
+  };
 
   render() {
     return (
       <div className="search-container">
-        <input
-          type="text"
-          value={this.state.value}
-          onChange={this.handleChange}
-          className="input"
-        />
+        <div className="input-container">
+          <input
+            type="text"
+            value={this.state.value}
+            onChange={this.handleChange}
+            className="input"
+          />
+          {this.state.validationMessage && (
+            <span className="input-message">
+              {this.state.validationMessage}
+            </span>
+          )}
+        </div>
         <button onClick={this.handleClick} className="btn btn-search">
           Search
         </button>
