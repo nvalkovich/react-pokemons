@@ -1,5 +1,6 @@
 import { ChangeEvent, Component } from 'react';
 import './SearchInput.css';
+import ErrorButton from '../ErrorButton';
 
 type SearchProps = {
   value: string;
@@ -39,6 +40,7 @@ class SearchInput extends Component<SearchProps, SearchState> {
         <button onClick={this.handleClick} className="btn">
           Search
         </button>
+        <ErrorButton />
       </div>
     );
   }

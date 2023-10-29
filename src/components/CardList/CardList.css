@@ -7,21 +7,20 @@
   grid-template-columns: repeat(4, 1fr);
 }
 
-@media(max-width: 1060px) {
+@media (max-width: 1060px) {
   .card-list {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-@media(max-width: 780px) {
+@media (max-width: 780px) {
   .card-list {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media(max-width: 525px) {
+@media (max-width: 525px) {
   .card-list {
     grid-template-columns: repeat(1, 1fr);
   }
 }
-

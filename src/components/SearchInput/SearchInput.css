@@ -13,7 +13,7 @@
   width: 60px;
 }
 
-@media(max-width: 530px) {
+@media (max-width: 590px) {
   .search-container {
     width: 100%;
     display: flex;
