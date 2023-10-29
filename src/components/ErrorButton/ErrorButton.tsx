@@ -22,7 +22,7 @@ class ErrorButton extends Component<object, ErrorButtonState> {
     }
     return (
       <>
-        <button onClick={this.handleClick} className="btn btn-error">
+        <button onClick={this.handleClick} className="btn">
           Error
         </button>
       </>

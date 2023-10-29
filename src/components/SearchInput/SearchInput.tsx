@@ -56,7 +56,7 @@ class SearchInput extends Component<SearchProps, SearchState> {
             </span>
           )}
         </div>
-        <button onClick={this.handleClick} className="btn btn-search">
+        <button onClick={this.handleClick} className="btn">
           Search
         </button>
         <ErrorButton />
