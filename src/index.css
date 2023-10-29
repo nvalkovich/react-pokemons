@@ -11,6 +11,11 @@
   border: 0.5px solid;
   height: 32px;
   width: 60px;
+  transition: 0.5s all;
+}
+
+.btn:hover {
+  background-color: rgba(247, 250, 72, 0.643);
 }
 
 .title {

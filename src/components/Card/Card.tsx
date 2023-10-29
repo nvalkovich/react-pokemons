@@ -10,12 +10,20 @@ class Card extends Component<CardProps> {
   render() {
     return (
       <div className="card">
-        <p>{this.props.data.name}</p>
+        <p className="card__name">{this.props.data.name}</p>
         <img
-          className="card__name"
+          className="card__image"
           src={this.props.data.images.small}
           alt={this.props.data.name}
         ></img>
+        <ul className="card__details-list card-details">
+          <li className="card-details__item">
+            Level: {this.props.data.level || 'Unknown'}
+          </li>
+          <li className="card-details__item">
+            Rarity: {this.props.data.rarity || 'Unknown'}
+          </li>
+        </ul>
       </div>
     );
   }
