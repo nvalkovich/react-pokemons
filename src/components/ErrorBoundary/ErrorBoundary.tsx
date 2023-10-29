@@ -1,4 +1,5 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
+import './ErrorBoundary.css'
 
 interface Props {
   children?: ReactNode;
@@ -24,7 +25,12 @@ class ErrorBoundary extends Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
-      return <h1>Something went wrong.</h1>;
+      return (
+        <div className="fallback-ui">
+          <h1 className='title'>Oops! Something went wrong.. </h1>
+          <img src='./images/sad-pokemon.png' className='fallback-ui__image'></img>
+        </div>
+      )
     }
 
     return this.props.children;

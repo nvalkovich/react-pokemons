@@ -1,6 +1,6 @@
 .card-list {
   min-height: 100vh;
-  min-width: 95%;
+  width: 80%;
   padding: 10px;
   display: grid;
   gap: 10px;

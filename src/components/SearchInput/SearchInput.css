@@ -1,16 +1,11 @@
-.input,
-.btn {
-  height: 30px;
-  padding: 5px;
+.search-container {
+  display: flex;
+  gap: 5px;
 }
 
 .input {
+  padding: 5px;
   width: 400px;
-}
-
-.btn {
-  margin-left: 5px;
-  width: 60px;
 }
 
 @media (max-width: 590px) {

@@ -15,16 +15,13 @@ class SearchInput extends Component<SearchProps, SearchState> {
   constructor(props: SearchProps) {
     super(props);
     this.state = { value: props.value };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleClick = this.handleClick.bind(this);
   }
 
-  handleChange(event: ChangeEvent<HTMLInputElement>) {
+  handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     this.setState({ value: event.target.value });
   }
 
-  handleClick() {
+  handleClick = () => {
     this.props.onSearch(this.state.value);
   }
 
@@ -37,7 +34,7 @@ class SearchInput extends Component<SearchProps, SearchState> {
           onChange={this.handleChange}
           className="input"
         />
-        <button onClick={this.handleClick} className="btn">
+        <button onClick={this.handleClick} className="btn btn-search">
           Search
         </button>
         <ErrorButton />

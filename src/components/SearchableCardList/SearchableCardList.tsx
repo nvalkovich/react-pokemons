@@ -4,6 +4,7 @@ import CardList from '../CardList';
 import { CardData } from '../../types/interfaces';
 import Api from '../../Api';
 import Loader from '../Loader';
+import './SearchableCardList.css';
 
 type SearchableCardListState = {
   searchQuery: string;
@@ -48,15 +49,20 @@ class SearchableCardList extends Component<object, SearchableCardListState> {
   render() {
     return (
       <>
-        <SearchInput
-          value={this.state.searchQuery}
-          onSearch={this.handleSearch}
-        />
-        {this.state.isFetching ? (
-          <Loader />
-        ) : (
-          <CardList list={this.state.list} />
-        )}
+        <div className="search-section">
+          <h1 className="title">Pokémon cards</h1>
+          <SearchInput
+            value={this.state.searchQuery}
+            onSearch={this.handleSearch}
+          />
+        </div>
+        <div className="cards-section">
+          {this.state.isFetching ? (
+            <Loader />
+          ) : (
+            <CardList list={this.state.list} />
+          )}
+        </div>
       </>
     );
   }

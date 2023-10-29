@@ -2,5 +2,17 @@
   padding: 0px;
   margin: 0px;
   box-sizing: border-box;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.btn {
+  cursor: pointer;
+  background-color: rgba(242, 245, 70, 0.467);
+  border: 0.5px solid;
+  height: 32px;
+  width: 60px;
+}
+
+.title {
+  font-weight: 500;
 }

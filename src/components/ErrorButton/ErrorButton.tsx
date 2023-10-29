@@ -1,5 +1,4 @@
 import { Component } from 'react';
-import './ErrorButton.css';
 
 type ErrorButtonState = {
   isError: boolean;
@@ -11,11 +10,9 @@ class ErrorButton extends Component<object, ErrorButtonState> {
     this.state = {
       isError: false,
     };
-
-    this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick() {
+  handleClick = () => {
     this.setState({ isError: true });
   }
 

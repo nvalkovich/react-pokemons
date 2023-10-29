@@ -1,0 +1,13 @@
+.search-section {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  background-color: rgba(241, 241, 241, 0.7);
+}
+
+.search-section,
+.cards-section {
+  padding: 20px 0px 35px 0px;
+}
