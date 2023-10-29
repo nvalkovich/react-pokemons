@@ -1,10 +1,11 @@
 export interface CardData {
   id: string;
   name: string;
-  supertype: string;
-  subtypes: string[];
-  number: string;
-  rarity: string;
+  flavorText?: string;
+  images: {
+    small: string;
+    large: string;
+  };
 }
 
 export interface QueryParams {

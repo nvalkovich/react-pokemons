@@ -12,3 +12,15 @@
   margin-left: 5px;
   width: 60px;
 }
+
+@media(max-width: 530px) {
+  .search-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .input {
+    width: 70%;
+  }
+}

@@ -1,9 +1,27 @@
 .card-list {
   min-height: 100vh;
   min-width: 95%;
-  border: 1px solid;
   padding: 10px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
+  grid-template-columns: repeat(4, 1fr);
 }
+
+@media(max-width: 1060px) {
+  .card-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media(max-width: 780px) {
+  .card-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media(max-width: 525px) {
+  .card-list {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
