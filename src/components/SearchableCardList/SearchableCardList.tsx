@@ -1,17 +1,19 @@
 import { Component } from 'react';
 import SearchInput from '../SearchInput';
-import CardsList from '../CardsList';
+import CardList from '../CardList';
 import { CardData } from '../../types/interfaces';
 import Api from '../../Api';
+import Loader from '../Loader';
 
-type SearchSectionState = {
+type SearchableCardListState = {
   searchQuery: string;
+  isFetching: boolean;
   list: CardData[];
-}
+};
 
 const searchQueryKey = 'searchQuery';
 
-class SearchSection extends Component<object, SearchSectionState> {
+class SearchableCardList extends Component<object, SearchableCardListState> {
   private api: Api;
 
   constructor(props: object) {
@@ -19,6 +21,7 @@ class SearchSection extends Component<object, SearchSectionState> {
     const searchQuery = localStorage.getItem(searchQueryKey);
     this.state = {
       searchQuery: searchQuery ?? '',
+      isFetching: false,
       list: [],
     };
 
@@ -32,18 +35,31 @@ class SearchSection extends Component<object, SearchSectionState> {
 
   async handleSearch(searchQuery: string) {
     localStorage.setItem(searchQueryKey, searchQuery);
-    const data = await this.api.searchCardsByName(searchQuery);
-    this.setState({ list: data, searchQuery: searchQuery});
+    this.setState({ isFetching: true });
+
+    try {
+      const data = await this.api.searchCardsByName(searchQuery);
+      this.setState({ list: data, searchQuery });
+    } finally {
+      this.setState({ isFetching: false });
+    }
   }
 
   render() {
     return (
       <>
-        <SearchInput value={this.state.searchQuery} onSearch={this.handleSearch}/>
-        <CardsList list={this.state.list}/>
+        <SearchInput
+          value={this.state.searchQuery}
+          onSearch={this.handleSearch}
+        />
+        {this.state.isFetching ? (
+          <Loader />
+        ) : (
+          <CardList list={this.state.list} />
+        )}
       </>
     );
   }
 }
 
-export default SearchSection;
+export default SearchableCardList;

@@ -34,7 +34,7 @@ class Api {
     const query = this.getQueryString([
       { key: 'pageSize', value: `${this.pageSize}` },
       { key: 'page', value: `${page}` },
-      { key: 'q', value: `name:${name.trim()}*` },
+      { key: 'q', value: `name:${name.trim().replaceAll(' ', '*')}*` },
     ]);
     const url = `${this.baseURL}${this.path.cards}${query}`;
 

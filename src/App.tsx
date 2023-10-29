@@ -1,12 +1,12 @@
 import { Component } from 'react';
 import './App.css';
-import SearchSection from './components/SearchSection';
+import SearchableCardList from './components/SearchableCardList';
 
 class App extends Component {
   render() {
     return (
-      <div className='app-container'>
-        <SearchSection />
+      <div className="app-container">
+        <SearchableCardList />
       </div>
     );
   }

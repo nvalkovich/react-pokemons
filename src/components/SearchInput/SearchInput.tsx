@@ -2,12 +2,12 @@ import { ChangeEvent, Component } from 'react';
 import './SearchInput.css';
 
 type SearchProps = {
-  value: string,
+  value: string;
   onSearch: (query: string) => void;
 };
 
 type SearchState = {
-  value: string,
+  value: string;
 };
 
 class SearchInput extends Component<SearchProps, SearchState> {
@@ -29,14 +29,16 @@ class SearchInput extends Component<SearchProps, SearchState> {
 
   render() {
     return (
-      <div className='search-container'>
+      <div className="search-container">
         <input
           type="text"
           value={this.state.value}
           onChange={this.handleChange}
           className="input"
         />
-        <button onClick={this.handleClick} className="btn">Search</button>
+        <button onClick={this.handleClick} className="btn">
+          Search
+        </button>
       </div>
     );
   }
