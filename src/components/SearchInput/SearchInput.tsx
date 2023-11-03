@@ -1,4 +1,5 @@
-import { ChangeEvent, Component } from 'react';
+import { ChangeEvent } from 'react';
+import { useState } from 'react';
 import './SearchInput.css';
 import ErrorButton from '../ErrorButton';
 
@@ -7,62 +8,47 @@ type SearchProps = {
   onSearch: (query: string) => void;
 };
 
-type SearchState = {
-  value: string;
-  validationMessage: string | null;
-};
+export default function SearchInput({ value, onSearch }: SearchProps) {
+  const validationRegExp = /^[0-9a-zA-Z\s]+$/;
 
-class SearchInput extends Component<SearchProps, SearchState> {
-  private validationRegExp: RegExp;
+  const [stateValue, setStateValue] = useState(value);
+  const [validationMessage, setValidationMessage] = useState<string | null>(
+    null
+  );
 
-  constructor(props: SearchProps) {
-    super(props);
-    this.state = {
-      value: props.value,
-      validationMessage: null,
-    };
-    this.validationRegExp = /^[0-9a-zA-Z\s]+$/;
-  }
-
-  handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    this.setState({ value: event.target.value, validationMessage: null });
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setStateValue(event.target.value);
+    setValidationMessage(null);
   };
 
-  handleClick = () => {
-    if (!this.state.value.match(this.validationRegExp) && this.state.value) {
-      this.setState({
-        validationMessage:
-          'Invalid search request. Please, use Latin characters',
-      });
+  const handleClick = () => {
+    if (!stateValue.match(validationRegExp) && stateValue) {
+      setValidationMessage(
+        'Invalid search request. Please, use Latin characters'
+      );
       return;
     }
 
-    this.props.onSearch(this.state.value);
+    onSearch(stateValue);
   };
 
-  render() {
-    return (
-      <div className="search-container">
-        <div className="input-container">
-          <input
-            type="text"
-            value={this.state.value}
-            onChange={this.handleChange}
-            className="input"
-          />
-          {this.state.validationMessage && (
-            <span className="input-message">
-              {this.state.validationMessage}
-            </span>
-          )}
-        </div>
-        <button onClick={this.handleClick} className="btn">
-          Search
-        </button>
-        <ErrorButton />
+  return (
+    <div className="search-container">
+      <div className="input-container">
+        <input
+          type="text"
+          value={stateValue}
+          onChange={handleChange}
+          className="input"
+        />
+        {validationMessage && (
+          <span className="input-message">{validationMessage}</span>
+        )}
       </div>
-    );
-  }
+      <button onClick={handleClick} className="btn">
+        Search
+      </button>
+      <ErrorButton />
+    </div>
+  );
 }
-
-export default SearchInput;

@@ -1,71 +1,50 @@
-import { Component } from 'react';
+import { useEffect, useState } from 'react';
 import SearchInput from '../SearchInput';
 import CardList from '../CardList';
 import { CardData } from '../../types/interfaces';
 import Api from '../../Api';
 import Loader from '../Loader';
 import './SearchableCardList.css';
+const api = new Api();
 
-type SearchableCardListState = {
-  searchQuery: string;
-  isFetching: boolean;
-  list: CardData[];
-};
+export default function SearchableCardList() {
+  const searchQueryKey = 'searchQuery';
+  const searchQueryFromLS = localStorage.getItem(searchQueryKey) || '';
 
-const searchQueryKey = 'searchQuery';
+  const [searchQuery, setSearchQuery] = useState(searchQueryFromLS);
+  const [isFetching, setFetching] = useState(false);
+  const [list, setList] = useState<CardData[]>([]);
 
-class SearchableCardList extends Component<object, SearchableCardListState> {
-  private api: Api;
-
-  constructor(props: object) {
-    super(props);
-    const searchQuery = localStorage.getItem(searchQueryKey);
-    this.state = {
-      searchQuery: searchQuery ?? '',
-      isFetching: false,
-      list: [],
-    };
-
-    this.handleSearch = this.handleSearch.bind(this);
-    this.api = new Api();
-  }
-
-  async componentDidMount() {
-    await this.handleSearch(this.state.searchQuery);
-  }
-
-  async handleSearch(searchQuery: string) {
-    localStorage.setItem(searchQueryKey, searchQuery);
-    this.setState({ isFetching: true });
+  async function handleSearch(query: string) {
+    localStorage.setItem(searchQueryKey, query);
+    setFetching(true);
 
     try {
-      const data = await this.api.searchCardsByName(searchQuery);
-      this.setState({ list: data, searchQuery });
+      const data = await api.searchCardsByName(query);
+      setList(data);
+      setSearchQuery(query);
     } finally {
-      this.setState({ isFetching: false });
+      setFetching(false);
     }
   }
 
-  render() {
-    return (
-      <>
-        <div className="search-section">
-          <h1 className="title">Pokémon cards</h1>
-          <SearchInput
-            value={this.state.searchQuery}
-            onSearch={this.handleSearch}
-          />
-        </div>
-        <div className="cards-section">
-          {this.state.isFetching ? (
-            <Loader />
-          ) : (
-            <CardList list={this.state.list} />
-          )}
-        </div>
-      </>
-    );
-  }
-}
+  useEffect(() => {
+    const search = async () => {
+      await handleSearch(searchQuery);
+    };
 
-export default SearchableCardList;
+    search().catch(console.error);
+  }, [searchQuery]);
+
+  return (
+    <>
+      <div className="search-section">
+        <h1 className="title">Pokémon cards</h1>
+        <SearchInput value={searchQuery} onSearch={handleSearch} />
+      </div>
+      <div className="cards-section">
+        {isFetching ? <Loader /> : <CardList list={list} />}
+      </div>
+    </>
+  );
+}
