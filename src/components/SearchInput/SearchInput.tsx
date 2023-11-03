@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, KeyboardEvent } from 'react';
 import { useState } from 'react';
 import './SearchInput.css';
 import ErrorButton from '../ErrorButton';
@@ -21,6 +21,12 @@ export default function SearchInput({ value, onSearch }: SearchProps) {
     setValidationMessage(null);
   };
 
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      onSearch(stateValue);
+    }
+  };
+
   const handleClick = () => {
     if (!stateValue.match(validationRegExp) && stateValue) {
       setValidationMessage(
@@ -39,6 +45,7 @@ export default function SearchInput({ value, onSearch }: SearchProps) {
           type="text"
           value={stateValue}
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
           className="input"
         />
         {validationMessage && (
