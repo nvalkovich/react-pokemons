@@ -10,6 +10,13 @@ export interface CardData {
   };
 }
 
+export interface CardsResponse {
+  data: CardData[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+}
+
 export interface QueryParams {
   key: string;
   value: string | number;

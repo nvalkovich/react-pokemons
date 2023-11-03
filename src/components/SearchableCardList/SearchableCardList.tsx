@@ -1,32 +1,49 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import SearchInput from '../SearchInput';
 import CardList from '../CardList';
 import { CardData } from '../../types/interfaces';
 import Api from '../../Api';
 import Loader from '../Loader';
 import './SearchableCardList.css';
+import Pagination from '../Pagination';
+
+const searchQueryKey = 'searchQuery';
 const api = new Api();
 
 export default function SearchableCardList() {
-  const searchQueryKey = 'searchQuery';
-  const searchQueryFromLS = localStorage.getItem(searchQueryKey) || '';
-
-  const [searchQuery, setSearchQuery] = useState(searchQueryFromLS);
+  const [searchQuery, setSearchQuery] = useState(
+    localStorage.getItem(searchQueryKey) || ''
+  );
   const [isFetching, setFetching] = useState(false);
   const [list, setList] = useState<CardData[]>([]);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
+  const [totalCount, setTotalCount] = useState(0);
 
-  async function handleSearch(query: string) {
-    localStorage.setItem(searchQueryKey, query);
-    setFetching(true);
+  const handleSearch = useCallback(
+    async (query: string) => {
+      localStorage.setItem(searchQueryKey, query);
+      setFetching(true);
 
-    try {
-      const data = await api.searchCardsByName(query);
-      setList(data);
-      setSearchQuery(query);
-    } finally {
-      setFetching(false);
-    }
-  }
+      try {
+        const cards = await api.searchCardsByName(query, page, pageSize);
+        setList(cards.data);
+        setTotalCount(cards.totalCount);
+        setSearchQuery(query);
+      } finally {
+        setFetching(false);
+      }
+    },
+    [page, pageSize]
+  );
+
+  const onPageChange = (page: number) => {
+    setPage(page);
+  };
+
+  const onPageSizeChange = (pageSize: number) => {
+    setPageSize(pageSize);
+  };
 
   useEffect(() => {
     const search = async () => {
@@ -34,7 +51,7 @@ export default function SearchableCardList() {
     };
 
     search().catch(console.error);
-  }, [searchQuery]);
+  }, [handleSearch, searchQuery]);
 
   return (
     <>
@@ -44,6 +61,15 @@ export default function SearchableCardList() {
       </div>
       <div className="cards-section">
         {isFetching ? <Loader /> : <CardList list={list} />}
+      </div>
+      <div className="pagination-section">
+        <Pagination
+          page={page}
+          pageSize={pageSize}
+          totalCount={totalCount}
+          onPageChange={onPageChange}
+          onPageSizeChange={onPageSizeChange}
+        />
       </div>
     </>
   );

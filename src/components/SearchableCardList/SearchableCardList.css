@@ -11,3 +11,12 @@
 .cards-section {
   padding: 20px 0px 35px 0px;
 }
+
+.pagination-section {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10%;
+  padding: 0px 0px 35px 0px;
+}
