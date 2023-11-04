@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import SearchInput from '../SearchInput';
 import CardList from '../CardList';
 import { CardData } from '../../types/interfaces';
@@ -20,22 +20,10 @@ export default function SearchableCardList() {
   const [pageSize, setPageSize] = useState(20);
   const [totalCount, setTotalCount] = useState(0);
 
-  const handleSearch = useCallback(
-    async (query: string) => {
-      localStorage.setItem(searchQueryKey, query);
-      setFetching(true);
-
-      try {
-        const cards = await api.searchCardsByName(query, page, pageSize);
-        setList(cards.data);
-        setTotalCount(cards.totalCount);
-        setSearchQuery(query);
-      } finally {
-        setFetching(false);
-      }
-    },
-    [page, pageSize]
-  );
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setPage(1);
+  };
 
   const onPageChange = (page: number) => {
     setPage(page);
@@ -43,15 +31,25 @@ export default function SearchableCardList() {
 
   const onPageSizeChange = (pageSize: number) => {
     setPageSize(pageSize);
+    setPage(1);
   };
 
   useEffect(() => {
     const search = async () => {
-      await handleSearch(searchQuery);
+      localStorage.setItem(searchQueryKey, searchQuery);
+      setFetching(true);
+
+      try {
+        const cards = await api.searchCardsByName(searchQuery, page, pageSize);
+        setList(cards.data);
+        setTotalCount(cards.totalCount);
+      } finally {
+        setFetching(false);
+      }
     };
 
     search().catch(console.error);
-  }, [handleSearch, searchQuery]);
+  }, [searchQuery, page, pageSize]);
 
   return (
     <>
