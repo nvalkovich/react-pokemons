@@ -5,6 +5,11 @@
   font-family: 'Open Sans', sans-serif;
 }
 
+a {
+  color: black;
+  text-decoration: none;
+}
+
 .btn {
   cursor: pointer;
   background-color: rgba(242, 245, 70, 0.467);

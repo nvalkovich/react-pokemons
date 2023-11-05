@@ -14,9 +14,11 @@ export default function Card({ data }: CardProps) {
         src={data.images.small}
         alt={data.name}
       ></img>
-      <ul className="card__details-list card-details">
-        <li className="card-details__item">Level: {data.level || 'Unknown'}</li>
-        <li className="card-details__item">
+      <ul className="card__details-list card-details-list">
+        <li className="card-details-list__item">
+          Level: {data.level || 'Unknown'}
+        </li>
+        <li className="card-details-list__item">
           Rarity: {data.rarity || 'Unknown'}
         </li>
       </ul>

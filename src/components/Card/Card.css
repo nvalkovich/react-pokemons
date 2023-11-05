@@ -15,7 +15,7 @@
   text-align: center;
 }
 
-.card-details {
+.card-details-list {
   padding-top: 20px;
   font-size: 12px;
   position: absolute;
@@ -23,6 +23,6 @@
   left: 7px;
 }
 
-.card-details__item {
+.card-details-list__item {
   list-style-type: none;
 }

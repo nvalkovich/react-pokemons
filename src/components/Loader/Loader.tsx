@@ -1,5 +1,9 @@
 import './Loader.css';
 
 export default function Loader() {
-  return <img className="loader" src="./svg/pokeball.svg"></img>;
+  return (
+    <div className="loader-wrapper">
+      <img className="loader" src="./svg/pokeball.svg"></img>;
+    </div>
+  );
 }

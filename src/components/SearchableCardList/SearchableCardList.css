@@ -1,19 +1,41 @@
+.left-section {
+  padding: 20px 0px 35px 0px;
+  width: 100%;
+  min-width: 50%;
+}
+
 .search-section {
   display: flex;
   align-items: center;
   flex-direction: column;
   gap: 20px;
   width: 100%;
+  min-width: 50%;
+  position: relative;
+  z-index: 1;
   background-color: rgba(241, 241, 241, 0.7);
 }
 
-.loader-container {
+.cards-loader-container {
+  width: 100%;
   padding: 40px 0px 0px 0px;
 }
 
 .search-section,
 .cards-section {
   padding: 20px 0px 35px 0px;
+}
+
+.cards-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.right-section {
+  padding: 20px 0px 35px 0px;
+  width: auto;
+  max-height: 100vh;
 }
 
 .pagination-section {

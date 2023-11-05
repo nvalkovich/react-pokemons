@@ -6,7 +6,7 @@ import Api from '../../Api';
 import Loader from '../Loader';
 import './SearchableCardList.css';
 import Pagination from '../Pagination';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 
 const searchQueryKey = 'searchQuery';
 const api = new Api();
@@ -60,30 +60,35 @@ export default function SearchableCardList() {
 
   return (
     <>
-      <div className="search-section">
-        <h1 className="title">Pokémon cards</h1>
-        <SearchInput value={searchQuery} onSearch={handleSearch} />
-      </div>
-      {isFetching ? (
-        <div className="loader-container">
-          <Loader />
+      <div className="left-section">
+        <div className="search-section">
+          <h1 className="title">Pokémon cards</h1>
+          <SearchInput value={searchQuery} onSearch={handleSearch} />
         </div>
-      ) : (
-        <>
-          <div className="cards-section">
-            <CardList list={list} />
+        {isFetching ? (
+          <div className="cards-loader-container">
+            <Loader />
           </div>
-          <div className="pagination-section">
-            <Pagination
-              page={page}
-              pageSize={pageSize}
-              totalCount={totalCount}
-              onPageChange={onPageChange}
-              onPageSizeChange={onPageSizeChange}
-            />
-          </div>
-        </>
-      )}
+        ) : (
+          <>
+            <div className="cards-section">
+              <CardList list={list} />
+            </div>
+            <div className="pagination-section">
+              <Pagination
+                page={page}
+                pageSize={pageSize}
+                totalCount={totalCount}
+                onPageChange={onPageChange}
+                onPageSizeChange={onPageSizeChange}
+              />
+            </div>
+          </>
+        )}
+      </div>
+      <div className="right-section">
+        <Outlet />
+      </div>
     </>
   );
 }

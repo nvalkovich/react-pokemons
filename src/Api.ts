@@ -1,4 +1,4 @@
-import { CardsResponse, QueryParams } from './types/interfaces';
+import { CardData, CardsResponse, QueryParams } from './types/interfaces';
 
 class Api {
   private baseURL: string;
@@ -39,6 +39,15 @@ class Api {
     const response = await fetch(url);
 
     return await response.json();
+  }
+
+  public async getCard(id: string): Promise<CardData> {
+    const url = `${this.baseURL}${this.path.cards}/${id}`;
+
+    const response = await fetch(url);
+    const card = await response.json();
+
+    return card.data;
   }
 }
 
