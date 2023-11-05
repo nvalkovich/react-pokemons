@@ -7,6 +7,10 @@
   background-color: rgba(241, 241, 241, 0.7);
 }
 
+.loader-container {
+  padding: 40px 0px 0px 0px;
+}
+
 .search-section,
 .cards-section {
   padding: 20px 0px 35px 0px;

@@ -6,6 +6,7 @@ import Api from '../../Api';
 import Loader from '../Loader';
 import './SearchableCardList.css';
 import Pagination from '../Pagination';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const searchQueryKey = 'searchQuery';
 const api = new Api();
@@ -16,22 +17,28 @@ export default function SearchableCardList() {
   );
   const [isFetching, setFetching] = useState(false);
   const [list, setList] = useState<CardData[]>([]);
-  const [page, setPage] = useState(1);
+
+  const [searchParams, setSearchParms] = useSearchParams();
+  const page = +(searchParams.get('page') ?? '1');
+
   const [pageSize, setPageSize] = useState(20);
   const [totalCount, setTotalCount] = useState(0);
 
+  const navigate = useNavigate();
+
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-    setPage(1);
+    setSearchParms({ page: '1' });
   };
 
   const onPageChange = (page: number) => {
-    setPage(page);
+    searchParams.set('page', page.toString());
+    navigate({ search: searchParams.toString() });
   };
 
   const onPageSizeChange = (pageSize: number) => {
     setPageSize(pageSize);
-    setPage(1);
+    setSearchParms({ page: '1' });
   };
 
   useEffect(() => {
@@ -57,18 +64,26 @@ export default function SearchableCardList() {
         <h1 className="title">Pokémon cards</h1>
         <SearchInput value={searchQuery} onSearch={handleSearch} />
       </div>
-      <div className="cards-section">
-        {isFetching ? <Loader /> : <CardList list={list} />}
-      </div>
-      <div className="pagination-section">
-        <Pagination
-          page={page}
-          pageSize={pageSize}
-          totalCount={totalCount}
-          onPageChange={onPageChange}
-          onPageSizeChange={onPageSizeChange}
-        />
-      </div>
+      {isFetching ? (
+        <div className="loader-container">
+          <Loader />
+        </div>
+      ) : (
+        <>
+          <div className="cards-section">
+            <CardList list={list} />
+          </div>
+          <div className="pagination-section">
+            <Pagination
+              page={page}
+              pageSize={pageSize}
+              totalCount={totalCount}
+              onPageChange={onPageChange}
+              onPageSizeChange={onPageSizeChange}
+            />
+          </div>
+        </>
+      )}
     </>
   );
 }
