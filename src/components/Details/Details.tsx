@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Api from '../../Api';
 import { useEffect, useState } from 'react';
 import { CardData } from '../../types/interfaces';
@@ -12,6 +12,13 @@ export default function Details() {
   const id = searchParams.get('id');
   const [card, setCard] = useState<CardData | null>(null);
   const [isFetching, setFetching] = useState(false);
+
+  const navigate = useNavigate();
+
+  const onCloseClick = () => {
+    searchParams.delete('id');
+    navigate({ pathname: '/', search: searchParams.toString() });
+  };
 
   useEffect(() => {
     const search = async () => {
@@ -40,57 +47,60 @@ export default function Details() {
       ) : (
         <>
           <div className="card-details-container">
-            <button className="card-details-container__btn-close btn">
-              Close
-            </button>
             {card ? (
               <div className="card-details">
-                <h1 className="title">{card.name}</h1>
+                <button
+                  className="card-details-container__btn-close btn"
+                  onClick={onCloseClick}
+                >
+                  Close
+                </button>
+                <h1 className="card-details__title title">{card.name}</h1>
                 <ul className="card-details__details">
-                  <p>
+                  <li>
                     <span className="detail-category">Supertype: </span>
                     {card.supertype}
-                  </p>
-                  <p>
+                  </li>
+                  <li>
                     <span className="detail-category">Subtypes: </span>{' '}
                     {card.subtypes.join(', ')}
-                  </p>
+                  </li>
                   {card.types && (
-                    <p>
+                    <li>
                       <span className="detail-category">Types:</span>{' '}
                       {card.types?.join(', ')}
-                    </p>
+                    </li>
                   )}
                   {card.level && (
-                    <p>
+                    <li>
                       <span className="detail-category">Level:</span>{' '}
                       {card.level}
-                    </p>
+                    </li>
                   )}
                   {card.hp && (
-                    <p>
+                    <li>
                       <span className="detail-category">HP:</span> {card.hp}
-                    </p>
+                    </li>
                   )}
                   {card.abilities && (
-                    <p>
+                    <li>
                       <span className="detail-category">Abilities: </span>
                       {card.abilities
                         ?.map((ability) => ability.name)
                         .join(', ')}
-                    </p>
+                    </li>
                   )}
                   {card.attacks && (
-                    <p>
+                    <li>
                       <span className="detail-category">Attacks: </span>
                       {card.attacks?.map((attack) => attack.name).join(', ')}
-                    </p>
+                    </li>
                   )}
                   {card.rarity && (
-                    <p>
+                    <li>
                       <span className="detail-category">Rarity: </span>{' '}
                       {card.rarity}
-                    </p>
+                    </li>
                   )}
                 </ul>
                 <img

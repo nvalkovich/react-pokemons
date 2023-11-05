@@ -6,7 +6,12 @@ import Api from '../../Api';
 import Loader from '../Loader';
 import './SearchableCardList.css';
 import Pagination from '../Pagination';
-import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
+import {
+  Outlet,
+  useNavigate,
+  useLocation,
+  useSearchParams,
+} from 'react-router-dom';
 
 const searchQueryKey = 'searchQuery';
 const api = new Api();
@@ -26,6 +31,9 @@ export default function SearchableCardList() {
 
   const navigate = useNavigate();
 
+  const location = useLocation();
+  const isShaded = location.pathname === '/details';
+
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     setSearchParms({ page: '1' });
@@ -39,6 +47,11 @@ export default function SearchableCardList() {
   const onPageSizeChange = (pageSize: number) => {
     setPageSize(pageSize);
     setSearchParms({ page: '1' });
+  };
+
+  const onWrapperClick = () => {
+    searchParams.delete('id');
+    navigate({ pathname: '/', search: searchParams.toString() });
   };
 
   useEffect(() => {
@@ -58,34 +71,44 @@ export default function SearchableCardList() {
     search().catch(console.error);
   }, [searchQuery, page, pageSize]);
 
+  const leftSectionContent = (
+    <div className="left-section">
+      <div className="search-section">
+        <h1 className="title">Pokémon cards</h1>
+        <SearchInput value={searchQuery} onSearch={handleSearch} />
+      </div>
+      {isFetching ? (
+        <div className="cards-loader-container">
+          <Loader />
+        </div>
+      ) : (
+        <>
+          <div className="cards-section">
+            <CardList list={list} />
+          </div>
+          <div className="pagination-section">
+            <Pagination
+              page={page}
+              pageSize={pageSize}
+              totalCount={totalCount}
+              onPageChange={onPageChange}
+              onPageSizeChange={onPageSizeChange}
+            />
+          </div>
+        </>
+      )}
+    </div>
+  );
+
   return (
     <>
-      <div className="left-section">
-        <div className="search-section">
-          <h1 className="title">Pokémon cards</h1>
-          <SearchInput value={searchQuery} onSearch={handleSearch} />
+      {isShaded ? (
+        <div className="shaded-wrapper" onClick={onWrapperClick}>
+          {leftSectionContent}
         </div>
-        {isFetching ? (
-          <div className="cards-loader-container">
-            <Loader />
-          </div>
-        ) : (
-          <>
-            <div className="cards-section">
-              <CardList list={list} />
-            </div>
-            <div className="pagination-section">
-              <Pagination
-                page={page}
-                pageSize={pageSize}
-                totalCount={totalCount}
-                onPageChange={onPageChange}
-                onPageSizeChange={onPageSizeChange}
-              />
-            </div>
-          </>
-        )}
-      </div>
+      ) : (
+        leftSectionContent
+      )}
       <div className="right-section">
         <Outlet />
       </div>

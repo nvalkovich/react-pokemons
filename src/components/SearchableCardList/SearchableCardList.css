@@ -1,7 +1,22 @@
 .left-section {
-  padding: 20px 0px 35px 0px;
   width: 100%;
-  min-width: 50%;
+}
+
+.shaded-wrapper::after {
+  content: '';
+  background: #00000071;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100%;
+  opacity: 0.7;
+  z-index: 1;
+}
+
+.shaded-wrapper {
+  max-height: 100vh;
+  overflow: hidden;
 }
 
 .search-section {
@@ -10,7 +25,6 @@
   flex-direction: column;
   gap: 20px;
   width: 100%;
-  min-width: 50%;
   position: relative;
   z-index: 1;
   background-color: rgba(241, 241, 241, 0.7);
@@ -33,9 +47,10 @@
 }
 
 .right-section {
-  padding: 20px 0px 35px 0px;
   width: auto;
   max-height: 100vh;
+  z-index: 5;
+  background-color: white;
 }
 
 .pagination-section {

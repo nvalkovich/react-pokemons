@@ -1,11 +1,11 @@
 .details-loader-container,
 .card-details-container {
   width: 500px;
+  background-color: rgba(241, 241, 241, 0.7);
   height: 100vh;
 }
 
 .card-details-container {
-  background-color: rgba(241, 241, 241, 0.7);
   position: relative;
 }
 
@@ -16,11 +16,15 @@
 }
 
 .card-details {
-  padding: 20px 30px;
+  padding: 20px 40px;
   display: flex;
   flex-direction: column;
   text-align: center;
   gap: 5px;
+}
+
+.card-details__title {
+  font-size: 30px;
 }
 
 .detail-category {
@@ -30,10 +34,11 @@
 .card-details__details {
   padding: 20px;
   text-align: left;
+  font-size: 16px;
 }
 
 .card-details__image {
-  width: 70%;
+  width: 50%;
   margin: 0 auto;
 }
 
