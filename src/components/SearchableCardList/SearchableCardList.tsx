@@ -23,8 +23,13 @@ export default function SearchableCardList() {
   const [isFetching, setFetching] = useState(false);
   const [list, setList] = useState<CardData[]>([]);
 
-  const [searchParams, setSearchParms] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const page = +(searchParams.get('page') ?? '1');
+
+  useEffect(() => {
+    searchParams.set('page', page.toString());
+    setSearchParams(searchParams);
+  }, [page, searchParams, setSearchParams]);
 
   const [pageSize, setPageSize] = useState(20);
   const [totalCount, setTotalCount] = useState(0);
@@ -36,7 +41,7 @@ export default function SearchableCardList() {
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-    setSearchParms({ page: '1' });
+    setSearchParams({ page: '1' });
   };
 
   const onPageChange = (page: number) => {
@@ -46,7 +51,7 @@ export default function SearchableCardList() {
 
   const onPageSizeChange = (pageSize: number) => {
     setPageSize(pageSize);
-    setSearchParms({ page: '1' });
+    setSearchParams({ page: '1' });
   };
 
   const onWrapperClick = () => {
