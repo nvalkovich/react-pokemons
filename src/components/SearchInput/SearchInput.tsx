@@ -1,17 +1,18 @@
-import { ChangeEvent, KeyboardEvent } from 'react';
+import { ChangeEvent, KeyboardEvent, useContext } from 'react';
 import { useState } from 'react';
 import './SearchInput.css';
 import ErrorButton from '../ErrorButton';
+import { StoreContext } from '../../storeContext';
 
 type SearchProps = {
-  value: string;
   onSearch: (query: string) => void;
 };
 
-export default function SearchInput({ value, onSearch }: SearchProps) {
+export default function SearchInput({ onSearch }: SearchProps) {
+  const { searchQuery } = useContext(StoreContext);
   const validationRegExp = /^[0-9a-zA-Z\s]+$/;
 
-  const [stateValue, setStateValue] = useState(value);
+  const [stateValue, setStateValue] = useState(searchQuery);
   const [validationMessage, setValidationMessage] = useState<string | null>(
     null
   );

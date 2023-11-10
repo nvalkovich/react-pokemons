@@ -12,6 +12,7 @@ import {
   useLocation,
   useSearchParams,
 } from 'react-router-dom';
+import { StoreContext } from '../../storeContext';
 
 const searchQueryKey = 'searchQuery';
 const api = new Api();
@@ -80,7 +81,7 @@ export default function SearchableCardList() {
     <div className="left-section">
       <div className="search-section">
         <h1 className="title">Pokémon cards</h1>
-        <SearchInput value={searchQuery} onSearch={handleSearch} />
+        <SearchInput onSearch={handleSearch} />
       </div>
       {isFetching ? (
         <div className="cards-loader-container">
@@ -89,7 +90,7 @@ export default function SearchableCardList() {
       ) : (
         <>
           <div className="cards-section">
-            <CardList list={list} />
+            <CardList />
           </div>
           <div className="pagination-section">
             <Pagination
@@ -106,17 +107,19 @@ export default function SearchableCardList() {
   );
 
   return (
-    <>
-      {isShaded ? (
-        <div className="shaded-wrapper" onClick={onWrapperClick}>
-          {leftSectionContent}
+    <StoreContext.Provider value={{ searchQuery, list }}>
+      <>
+        {isShaded ? (
+          <div className="shaded-wrapper" onClick={onWrapperClick}>
+            {leftSectionContent}
+          </div>
+        ) : (
+          leftSectionContent
+        )}
+        <div className="right-section">
+          <Outlet />
         </div>
-      ) : (
-        leftSectionContent
-      )}
-      <div className="right-section">
-        <Outlet />
-      </div>
-    </>
+      </>
+    </StoreContext.Provider>
   );
 }

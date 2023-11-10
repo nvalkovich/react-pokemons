@@ -1,13 +1,11 @@
 import { Link, useSearchParams } from 'react-router-dom';
-import { CardData } from '../../types/interfaces';
 import Card from '../Card';
 import './CardList.css';
+import { StoreContext } from '../../storeContext';
+import { useContext } from 'react';
 
-type CardListProps = {
-  list: CardData[];
-};
-
-export default function CardList({ list }: CardListProps) {
+export default function CardList() {
+  const { list } = useContext(StoreContext);
   const [searchParams] = useSearchParams();
 
   return list.length ? (
