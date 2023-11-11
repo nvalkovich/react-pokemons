@@ -1,54 +1,44 @@
 import { CardData, CardsResponse, QueryParams } from './types/interfaces';
 
-class Api {
-  private baseURL: string;
+const baseURL = 'https://api.pokemontcg.io/v2';
+const path = {
+  cards: '/cards',
+};
 
-  private path: { [key: string]: string };
+const getQueryString = (queryParams: QueryParams[]): string => {
+  let string = '';
 
-  constructor() {
-    this.baseURL = 'https://api.pokemontcg.io/v2';
-    this.path = {
-      cards: '/cards',
-    };
+  if (queryParams.length) {
+    string = `?${queryParams
+      .map((x): string => `${x.key}=${x.value}`)
+      .join('&')}`;
   }
 
-  public getQueryString(queryParams: QueryParams[]): string {
-    let string = '';
+  return string;
+};
 
-    if (queryParams.length) {
-      string = `?${queryParams
-        .map((x): string => `${x.key}=${x.value}`)
-        .join('&')}`;
-    }
+export const searchCardsByName = async (
+  name: string,
+  page: number,
+  pageSize: number
+): Promise<CardsResponse> => {
+  const query = getQueryString([
+    { key: 'pageSize', value: `${pageSize}` },
+    { key: 'page', value: `${page}` },
+    { key: 'q', value: `name:${name.trim().replaceAll(' ', '*')}*` },
+  ]);
+  const url = `${baseURL}${path.cards}${query}`;
 
-    return string;
-  }
+  const response = await fetch(url);
 
-  public async searchCardsByName(
-    name: string,
-    page: number,
-    pageSize: number
-  ): Promise<CardsResponse> {
-    const query = this.getQueryString([
-      { key: 'pageSize', value: `${pageSize}` },
-      { key: 'page', value: `${page}` },
-      { key: 'q', value: `name:${name.trim().replaceAll(' ', '*')}*` },
-    ]);
-    const url = `${this.baseURL}${this.path.cards}${query}`;
+  return await response.json();
+};
 
-    const response = await fetch(url);
+export const getCard = async (id: string): Promise<CardData> => {
+  const url = `${baseURL}${path.cards}/${id}`;
 
-    return await response.json();
-  }
+  const response = await fetch(url);
+  const card = await response.json();
 
-  public async getCard(id: string): Promise<CardData> {
-    const url = `${this.baseURL}${this.path.cards}/${id}`;
-
-    const response = await fetch(url);
-    const card = await response.json();
-
-    return card.data;
-  }
-}
-
-export default Api;
+  return card.data;
+};

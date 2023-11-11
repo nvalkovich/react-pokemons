@@ -1,11 +1,9 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import Api from '../../Api';
 import { useEffect, useState } from 'react';
 import { CardData } from '../../types/interfaces';
 import Loader from '../Loader';
 import './Details.css';
-
-const api = new Api();
+import { getCard } from '../../Api';
 
 export default function Details() {
   const [searchParams] = useSearchParams();
@@ -28,7 +26,7 @@ export default function Details() {
         if (!id) {
           return;
         }
-        const card = await api.getCard(id);
+        const card = await getCard(id);
         setCard(card);
       } finally {
         setFetching(false);
@@ -39,7 +37,7 @@ export default function Details() {
   }, [id]);
 
   return (
-    <>
+    <div data-testid="details">
       {isFetching ? (
         <div className="details-loader-container">
           <Loader />
@@ -118,6 +116,6 @@ export default function Details() {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 }

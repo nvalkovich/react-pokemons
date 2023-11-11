@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import SearchInput from '../SearchInput';
 import CardList from '../CardList';
 import { CardData } from '../../types/interfaces';
-import Api from '../../Api';
 import Loader from '../Loader';
 import './SearchableCardList.css';
 import Pagination from '../Pagination';
@@ -13,9 +12,9 @@ import {
   useSearchParams,
 } from 'react-router-dom';
 import { StoreContext } from '../../storeContext';
+import { searchCardsByName } from '../../Api';
 
 const searchQueryKey = 'searchQuery';
-const api = new Api();
 
 export default function SearchableCardList() {
   const [searchQuery, setSearchQuery] = useState(
@@ -66,7 +65,7 @@ export default function SearchableCardList() {
       setFetching(true);
 
       try {
-        const cards = await api.searchCardsByName(searchQuery, page, pageSize);
+        const cards = await searchCardsByName(searchQuery, page, pageSize);
         setList(cards.data);
         setTotalCount(cards.totalCount);
       } finally {
