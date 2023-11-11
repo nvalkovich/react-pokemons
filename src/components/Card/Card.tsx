@@ -11,7 +11,7 @@ export default function Card({ data }: CardProps) {
       <p className="card__name">{data.name}</p>
       <img
         className="card__image"
-        src={data.images.small}
+        src={data.images?.small}
         alt={data.name}
       ></img>
       <ul className="card__details-list card-details-list">

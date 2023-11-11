@@ -63,7 +63,7 @@ export default function Details() {
                   </li>
                   <li>
                     <span className="detail-category">Subtypes: </span>{' '}
-                    {card.subtypes.join(', ')}
+                    {card.subtypes?.join(', ')}
                   </li>
                   {card.types && (
                     <li>
@@ -105,7 +105,7 @@ export default function Details() {
                 </ul>
                 <img
                   className="card-details__image"
-                  src={card.images.small}
+                  src={card.images?.small}
                   alt={card.name}
                 ></img>
                 {card.flavorText && (

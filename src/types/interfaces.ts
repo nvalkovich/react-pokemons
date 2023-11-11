@@ -1,17 +1,17 @@
 export interface CardData {
   id: string;
   name: string;
-  level: string;
-  rarity: string;
-  supertype: string;
-  subtypes: string[];
+  level?: string;
+  rarity?: string;
+  supertype?: string;
+  subtypes?: string[];
   hp?: string;
   types?: string[];
   rules?: string[];
   abilities?: Ability[];
   attacks?: Attack[];
   flavorText?: string;
-  images: Images;
+  images?: Images;
 }
 
 interface Ability {

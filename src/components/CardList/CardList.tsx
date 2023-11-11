@@ -9,7 +9,7 @@ export default function CardList() {
   const [searchParams] = useSearchParams();
 
   return list.length ? (
-    <div className="card-list">
+    <div className="card-list" data-testid="card-list">
       {list.map((card) => {
         searchParams.set('id', card.id);
         return (
