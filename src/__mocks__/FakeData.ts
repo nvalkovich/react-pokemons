@@ -18,6 +18,10 @@ export const fakeCardList = [
     id: 'pl2-92',
     name: "Lucian's Assignment",
     supertype: 'Trainer',
+    subtypes: ['Basic'],
+    types: ['Lightning'],
+    hp: '90',
+    rarity: 'Rare',
     attacks: [
       {
         name: 'Quick Attack',
@@ -34,6 +38,8 @@ export const fakeCardList = [
         text: '',
       },
     ],
+    flavorText:
+      'This form of Pikachu is somewhat rare. It wears the hat of its Trainer, who is also its partner.',
     images: {
       small: 'https://images.pokemontcg.io/smp/SM112.png',
       large: 'https://images.pokemontcg.io/smp/SM112_hires.png',
@@ -43,6 +49,10 @@ export const fakeCardList = [
     id: 'smp-SM108',
     name: "Ash's Pikachu",
     supertype: 'Pokémon',
+    subtypes: ['Basic'],
+    types: ['Lightning'],
+    hp: '100',
+    rarity: 'Rare',
     flavorText:
       'This form of Pikachu is somewhat rare. It wears the hat of its Trainer, who is also its partner.',
     images: {

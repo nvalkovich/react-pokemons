@@ -5,7 +5,9 @@ import Details from '../components/Details';
 import { getCard } from '../Api';
 import Card from '../components/Card';
 import userEvent from '@testing-library/user-event';
-import { cardData as data } from '../test/data';
+import { fakeCardList } from '../__mocks__/FakeData';
+
+const data = fakeCardList[0];
 
 jest.mock('../Api');
 
