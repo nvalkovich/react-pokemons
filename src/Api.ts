@@ -5,7 +5,7 @@ const path = {
   cards: '/cards',
 };
 
-const getQueryString = (queryParams: QueryParams[]): string => {
+export const getQueryString = (queryParams: QueryParams[]): string => {
   let string = '';
 
   if (queryParams.length) {

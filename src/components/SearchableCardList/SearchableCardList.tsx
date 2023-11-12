@@ -62,7 +62,6 @@ export default function SearchableCardList() {
 
   useEffect(() => {
     const search = async () => {
-      localStorage.setItem(searchQueryKey, searchQuery);
       setFetching(true);
 
       try {

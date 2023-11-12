@@ -3,23 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import SearchInput from '../components/SearchInput';
-
-const localStorageMock = () => {
-  const setItemMock = jest.fn();
-  const getItemMock = jest.fn();
-
-  beforeEach(() => {
-    Storage.prototype.setItem = setItemMock;
-    Storage.prototype.getItem = getItemMock;
-  });
-
-  afterEach(() => {
-    setItemMock.mockRestore();
-    getItemMock.mockRestore();
-  });
-
-  return { setItemMock, getItemMock };
-};
+import { localStorageMock } from '../__mocks__/LocalStorageMock';
 
 const { getItemMock, setItemMock } = localStorageMock();
 

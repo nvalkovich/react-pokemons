@@ -4,6 +4,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import Pagination from '../components/Pagination';
 import { useState } from 'react';
+import { fakePaginationData } from '../__mocks__/FakeData';
 
 let mockSearchParam = '';
 
@@ -25,15 +26,7 @@ const OnPageChangeMockFn = jest.fn().mockImplementation((page) => {
   mockSearchParam = `page=${page}`;
 });
 
-const pagintationProps = {
-  page: 5,
-  pageSize: 4,
-  totalCount: 100,
-  onPageChange: OnPageChangeMockFn,
-  onPageSizeChange: jest.fn(),
-};
-
-const page = pagintationProps.page;
+const page = fakePaginationData.page;
 
 describe('pagination', () => {
   beforeEach(() => {
@@ -41,14 +34,15 @@ describe('pagination', () => {
       <Router>
         <Pagination
           page={page}
-          pageSize={pagintationProps.pageSize}
-          totalCount={pagintationProps.totalCount}
-          onPageChange={pagintationProps.onPageChange}
-          onPageSizeChange={pagintationProps.onPageSizeChange}
+          pageSize={fakePaginationData.pageSize}
+          totalCount={fakePaginationData.totalCount}
+          onPageChange={OnPageChangeMockFn}
+          onPageSizeChange={jest.fn()}
         />
       </Router>
     );
   });
+
   test('the component updates URL query parameter when page changes', async () => {
     await userEvent.click(screen.getByTestId('button-next-page'));
     expect(mockSearchParam).toContain(`page=${page + 1}`);

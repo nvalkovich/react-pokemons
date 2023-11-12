@@ -5,7 +5,7 @@ import { useContext } from 'react';
 
 export default function CardList() {
   const { list } = useContext(StoreContext);
-  return list.length ? (
+  return list && list.length ? (
     <div className="card-list" data-testid="card-list">
       {list.map((card) => {
         return <Card key={card.id} data={card} />;
