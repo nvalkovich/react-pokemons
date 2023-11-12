@@ -12,7 +12,8 @@
     "deploy": "gh-pages -d dist",
     "lint": "eslint src --fix",
     "format:fix": "prettier --write **/*.{js,jsx,ts,tsx,html,css,scss}",
-    "test": "jest --config ./jest.config.ts"
+    "test": "jest --config ./jest.config.ts",
+    "coverage": "jest --config ./jest.config.ts --coverage"
   },
   "dependencies": {
     "jest-environment-jsdom": "^29.7.0",
