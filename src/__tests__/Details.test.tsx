@@ -50,7 +50,7 @@ describe('Details loader', () => {
     expect(screen.getByText(data.flavorText)).toBeInTheDocument();
   });
 
-  test('the detailed card component correctly displays the detailed card data', async () => {
+  test('clicking the close button hides the component', async () => {
     (getCard as jest.Mock).mockResolvedValue(data);
 
     await userEvent.click(screen.getByTestId('card'));

@@ -28,7 +28,7 @@ const OnPageChangeMockFn = jest.fn().mockImplementation((page) => {
 
 const page = fakePaginationData.page;
 
-describe('pagination', () => {
+describe('the pagination component updates URL query parameter when page changes', () => {
   beforeEach(() => {
     render(
       <Router>
@@ -43,12 +43,12 @@ describe('pagination', () => {
     );
   });
 
-  test('the component updates URL query parameter when page changes', async () => {
+  test('next page click', async () => {
     await userEvent.click(screen.getByTestId('button-next-page'));
     expect(mockSearchParam).toContain(`page=${page + 1}`);
   });
 
-  test('prev', async () => {
+  test('prev page click', async () => {
     await userEvent.click(screen.getByTestId('button-prev-page'));
     expect(mockSearchParam).toContain(`page=${page - 1}`);
   });
