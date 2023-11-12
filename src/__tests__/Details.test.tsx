@@ -63,13 +63,7 @@ describe('details', () => {
   });
 
   test('the detailed card component correctly displays the detailed card data', async () => {
-    (getCard as jest.Mock).mockResolvedValue(
-      new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(data);
-        }, 0);
-      })
-    );
+    (getCard as jest.Mock).mockResolvedValue(data);
 
     render(
       <MemoryRouter>
