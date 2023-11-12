@@ -65,19 +65,19 @@ export default function Details() {
                   </li>
                   {card.types && (
                     <li>
-                      <span className="detail-category">Types:</span>{' '}
+                      <span className="detail-category">Types: </span>{' '}
                       {card.types?.join(', ')}
                     </li>
                   )}
                   {card.level && (
                     <li>
-                      <span className="detail-category">Level:</span>{' '}
+                      <span className="detail-category">Level: </span>{' '}
                       {card.level}
                     </li>
                   )}
                   {card.hp && (
                     <li>
-                      <span className="detail-category">HP:</span> {card.hp}
+                      <span className="detail-category">HP: </span> {card.hp}
                     </li>
                   )}
                   {card.abilities && (

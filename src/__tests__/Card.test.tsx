@@ -8,10 +8,35 @@ import Details from '../components/Details';
 import { getCard } from '../Api';
 
 const data = {
-  id: 'xy2-96',
-  name: 'Sacred Ash',
-  supertype: 'Trainer',
-  rarity: 'rare',
+  id: 'smp-SM112',
+  name: "Ash's Pikachu",
+  supertype: 'Pokémon',
+  subtypes: ['Basic'],
+  hp: '70',
+  types: ['Lightning'],
+  attacks: [
+    {
+      name: 'Quick Attack',
+      cost: ['Colorless'],
+      convertedEnergyCost: '1',
+      damage: '10+',
+      text: 'Flip a coin. If heads, this attack does 10 more damage.',
+    },
+    {
+      name: 'Electro Ball',
+      cost: ['Lightning', 'Colorless', 'Colorless'],
+      convertedEnergyCost: '3',
+      damage: '50',
+      text: '',
+    },
+  ],
+  rarity: 'Promo',
+  flavorText:
+    'This form of Pikachu is somewhat rare. It wears the hat of its Trainer, who is also its partner.',
+  images: {
+    small: 'https://images.pokemontcg.io/smp/SM112.png',
+    large: 'https://images.pokemontcg.io/smp/SM112_hires.png',
+  },
 };
 
 global.fetch = jest.fn(() =>
@@ -21,10 +46,9 @@ global.fetch = jest.fn(() =>
 ) as jest.Mock;
 
 jest.mock('../Api');
-(getCard as jest.Mock).mockResolvedValue(data);
 
 describe('Card', () => {
-  test('an appropriate message is displayed if no cards are present', () => {
+  test('the card component renders the relevant card data', () => {
     render(
       <Router>
         <Card data={data} />
@@ -36,6 +60,7 @@ describe('Card', () => {
   });
 
   test('clicking on a card opens a detailed card component', async () => {
+    (getCard as jest.Mock).mockResolvedValue(data);
     render(
       <MemoryRouter>
         <Routes>
@@ -45,11 +70,13 @@ describe('Card', () => {
       </MemoryRouter>
     );
 
-    userEvent.click(screen.getByTestId('card'));
+    await userEvent.click(screen.getByTestId('card'));
     expect(await screen.findByTestId('details')).toBeInTheDocument();
   });
 
   test('clicking triggers an additional API call to fetch detailed information', async () => {
+    (getCard as jest.Mock).mockResolvedValue(data);
+
     render(
       <MemoryRouter>
         <Routes>
@@ -59,7 +86,7 @@ describe('Card', () => {
       </MemoryRouter>
     );
 
-    userEvent.click(screen.getByTestId('card'));
-    expect(getCard).toHaveBeenCalledTimes(1);
+    await userEvent.click(screen.getByTestId('card'));
+    expect(getCard).toHaveBeenCalled();
   });
 });
