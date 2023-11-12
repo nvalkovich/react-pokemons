@@ -3,6 +3,7 @@ import SearchableCardList from './components/SearchableCardList';
 import ErrorBoundary from './components/ErrorBoundary';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Details from './components/Details';
+import NotFoundPage from './components/NotFoundPage';
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
               <Route index element={null} />
               <Route path="details" element={<Details />} />
             </Route>
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </BrowserRouter>
       </ErrorBoundary>
