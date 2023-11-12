@@ -40,6 +40,7 @@ export default function SearchableCardList() {
   const isShaded = location.pathname === '/details';
 
   const handleSearch = (query: string) => {
+    localStorage.setItem(searchQueryKey, query);
     setSearchQuery(query);
     setSearchParams({ page: '1' });
   };

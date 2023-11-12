@@ -1,4 +1,4 @@
-import { ChangeEvent, KeyboardEvent, useContext } from 'react';
+import { ChangeEvent, KeyboardEvent, useContext, useEffect } from 'react';
 import { useState } from 'react';
 import './SearchInput.css';
 import ErrorButton from '../ErrorButton';
@@ -39,10 +39,20 @@ export default function SearchInput({ onSearch }: SearchProps) {
     onSearch(stateValue);
   };
 
+  useEffect(() => {
+    const query = localStorage.getItem('searchQuery');
+    if (query && query.length) {
+      setStateValue(query);
+      onSearch(query);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="search-container">
       <div className="input-container">
         <input
+          data-testid="search-input"
           type="text"
           value={stateValue}
           onChange={handleChange}
@@ -53,7 +63,7 @@ export default function SearchInput({ onSearch }: SearchProps) {
           <span className="input-message">{validationMessage}</span>
         )}
       </div>
-      <button onClick={handleClick} className="btn">
+      <button data-testid="search-button" onClick={handleClick} className="btn">
         Search
       </button>
       <ErrorButton />
