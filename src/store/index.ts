@@ -1,5 +1,6 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import searchReducer from './searchSlice';
+import paginationReducer from './paginationSlice';
 import {
   persistStore,
   persistReducer,
@@ -14,6 +15,7 @@ import storage from 'redux-persist/lib/storage';
 
 const rootReducer = combineReducers({
   search: searchReducer,
+  pagination: paginationReducer,
 });
 
 const persistConfig = {

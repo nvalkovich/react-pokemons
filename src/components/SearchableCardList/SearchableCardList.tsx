@@ -17,35 +17,25 @@ import { useAppSelector } from '../../store/hooks';
 
 export default function SearchableCardList() {
   const searchQuery = useAppSelector((state) => state.search.searchQuery);
+  const itemsPerPage = useAppSelector((state) => state.pagination.itemsPerPage);
+  const currentPage = useAppSelector((state) => state.pagination.page);
 
   const [isFetching, setFetching] = useState(false);
   const [list, setList] = useState<CardData[]>([]);
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const page = +(searchParams.get('page') ?? '1');
 
   useEffect(() => {
-    searchParams.set('page', page.toString());
+    searchParams.set('page', currentPage.toString());
     setSearchParams(searchParams);
-  }, [page, searchParams, setSearchParams]);
+  }, [currentPage, searchParams, setSearchParams]);
 
-  const [pageSize, setPageSize] = useState(20);
   const [totalCount, setTotalCount] = useState(0);
 
   const navigate = useNavigate();
 
   const location = useLocation();
   const isShaded = location.pathname === '/details';
-
-  const onPageChange = (page: number) => {
-    searchParams.set('page', page.toString());
-    navigate({ search: searchParams.toString() });
-  };
-
-  const onPageSizeChange = (pageSize: number) => {
-    setPageSize(pageSize);
-    setSearchParams({ page: '1' });
-  };
 
   const onWrapperClick = () => {
     searchParams.delete('id');
@@ -57,7 +47,11 @@ export default function SearchableCardList() {
       setFetching(true);
 
       try {
-        const cards = await searchCardsByName(searchQuery, page, pageSize);
+        const cards = await searchCardsByName(
+          searchQuery,
+          currentPage,
+          itemsPerPage
+        );
         setList(cards.data);
         setTotalCount(cards.totalCount);
       } finally {
@@ -66,7 +60,7 @@ export default function SearchableCardList() {
     };
 
     search().catch(console.error);
-  }, [searchQuery, page, pageSize]);
+  }, [searchQuery, currentPage, itemsPerPage]);
 
   const leftSectionContent = (
     <div className="left-section">
@@ -84,13 +78,7 @@ export default function SearchableCardList() {
             <CardList />
           </div>
           <div className="pagination-section">
-            <Pagination
-              page={page}
-              pageSize={pageSize}
-              totalCount={totalCount}
-              onPageChange={onPageChange}
-              onPageSizeChange={onPageSizeChange}
-            />
+            <Pagination totalCount={totalCount} />
           </div>
         </>
       )}
