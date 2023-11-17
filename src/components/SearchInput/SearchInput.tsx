@@ -1,15 +1,16 @@
-import { ChangeEvent, KeyboardEvent, useContext, useEffect } from 'react';
+import { ChangeEvent, KeyboardEvent, useEffect } from 'react';
 import { useState } from 'react';
 import './SearchInput.css';
 import ErrorButton from '../ErrorButton';
-import { StoreContext } from '../../storeContext';
+import { useAppSelector } from '../../store/hooks';
+import { search } from '../../store/searchSlice';
+import { useAppDispatch } from '../../store/hooks';
 
-type SearchProps = {
-  onSearch: (query: string) => void;
-};
+export default function SearchInput() {
+  const dispatch = useAppDispatch();
+  const onSearch = (query: string) => dispatch(search(query));
+  const searchQuery = useAppSelector((store) => store.search.searchQuery);
 
-export default function SearchInput({ onSearch }: SearchProps) {
-  const { searchQuery } = useContext(StoreContext);
   const validationRegExp = /^[0-9a-zA-Z\s]+$/;
 
   const [stateValue, setStateValue] = useState(searchQuery);

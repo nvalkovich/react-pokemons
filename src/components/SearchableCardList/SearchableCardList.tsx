@@ -13,13 +13,11 @@ import {
 } from 'react-router-dom';
 import { StoreContext } from '../../storeContext';
 import { searchCardsByName } from '../../Api';
-
-const searchQueryKey = 'searchQuery';
+import { useAppSelector } from '../../store/hooks';
 
 export default function SearchableCardList() {
-  const [searchQuery, setSearchQuery] = useState(
-    localStorage.getItem(searchQueryKey) || ''
-  );
+  const searchQuery = useAppSelector((state) => state.search.searchQuery);
+
   const [isFetching, setFetching] = useState(false);
   const [list, setList] = useState<CardData[]>([]);
 
@@ -38,12 +36,6 @@ export default function SearchableCardList() {
 
   const location = useLocation();
   const isShaded = location.pathname === '/details';
-
-  const handleSearch = (query: string) => {
-    localStorage.setItem(searchQueryKey, query);
-    setSearchQuery(query);
-    setSearchParams({ page: '1' });
-  };
 
   const onPageChange = (page: number) => {
     searchParams.set('page', page.toString());
@@ -80,7 +72,7 @@ export default function SearchableCardList() {
     <div className="left-section">
       <div className="search-section">
         <h1 className="title">Pokémon cards</h1>
-        <SearchInput onSearch={handleSearch} />
+        <SearchInput />
       </div>
       {isFetching ? (
         <div className="cards-loader-container">
