@@ -5,10 +5,16 @@ import ErrorButton from '../ErrorButton';
 import { useAppSelector } from '../../store/hooks';
 import { search } from '../../store/searchSlice';
 import { useAppDispatch } from '../../store/hooks';
+import { setPage } from '../../store/paginationSlice';
 
 export default function SearchInput() {
   const dispatch = useAppDispatch();
-  const onSearch = (query: string) => dispatch(search(query));
+
+  const onSearch = (query: string) => {
+    dispatch(setPage('1'));
+    dispatch(search(query));
+  };
+
   const searchQuery = useAppSelector((store) => store.search.searchQuery);
 
   const validationRegExp = /^[0-9a-zA-Z\s]+$/;

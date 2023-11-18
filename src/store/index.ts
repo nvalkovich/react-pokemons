@@ -1,5 +1,6 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import searchReducer from './searchSlice';
+import { pokemonCardsApi } from '../services/pokemonCardsApi';
 import paginationReducer from './paginationSlice';
 import {
   persistStore,
@@ -16,11 +17,13 @@ import storage from 'redux-persist/lib/storage';
 const rootReducer = combineReducers({
   search: searchReducer,
   pagination: paginationReducer,
+  [pokemonCardsApi.reducerPath]: pokemonCardsApi.reducer,
 });
 
 const persistConfig = {
   key: 'root',
   storage,
+  blacklist: [pokemonCardsApi.reducerPath],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -32,7 +35,7 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }),
+    }).concat(pokemonCardsApi.middleware),
 });
 
 export default store;

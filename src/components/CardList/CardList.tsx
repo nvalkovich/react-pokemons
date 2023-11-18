@@ -1,10 +1,12 @@
 import Card from '../Card';
 import './CardList.css';
-import { StoreContext } from '../../storeContext';
-import { useContext } from 'react';
+import { CardData } from '../../types/interfaces';
 
-export default function CardList() {
-  const { list } = useContext(StoreContext);
+type CardListProps = {
+  list: CardData[] | [];
+};
+
+export default function CardList({ list }: CardListProps) {
   return list && list.length ? (
     <div className="card-list" data-testid="card-list">
       {list.map((card) => {

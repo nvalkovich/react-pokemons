@@ -1,15 +1,15 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { CardData } from '../../types/interfaces';
 import Loader from '../Loader';
 import './Details.css';
-import { getCard } from '../../Api';
+import { useGetCardByIdQuery } from '../../services/pokemonCardsApi';
 
 export default function Details() {
   const [searchParams] = useSearchParams();
   const id = searchParams.get('id');
-  const [card, setCard] = useState<CardData | null>(null);
-  const [isFetching, setFetching] = useState(false);
+
+  const { data: response, isFetching } = useGetCardByIdQuery(id as string);
+
+  const card = response?.data;
 
   const navigate = useNavigate();
 
@@ -17,24 +17,6 @@ export default function Details() {
     searchParams.delete('id');
     navigate({ pathname: '/', search: searchParams.toString() });
   };
-
-  useEffect(() => {
-    const search = async () => {
-      setFetching(true);
-
-      try {
-        if (!id) {
-          return;
-        }
-        const card = await getCard(id);
-        setCard(card);
-      } finally {
-        setFetching(false);
-      }
-    };
-
-    search().catch(console.error);
-  }, [id]);
 
   return (
     <div data-testid="details">
