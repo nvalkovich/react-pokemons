@@ -2,14 +2,24 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import Loader from '../Loader';
 import './Details.css';
 import { useGetCardByIdQuery } from '../../services/pokemonCardsApi';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { useEffect } from 'react';
+import { setDetailsLoading } from '../../store/loadingSlice';
 
 export default function Details() {
   const [searchParams] = useSearchParams();
+  const dispatch = useAppDispatch();
+
   const id = searchParams.get('id');
 
   const { data: response, isFetching } = useGetCardByIdQuery(id as string);
 
   const card = response?.data;
+
+  useEffect(() => {
+    dispatch(setDetailsLoading(isFetching));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFetching]);
 
   const navigate = useNavigate();
 
@@ -18,9 +28,11 @@ export default function Details() {
     navigate({ pathname: '/', search: searchParams.toString() });
   };
 
+  const isLoading = useAppSelector((state) => state.loading.detailsLoading);
+
   return (
     <div data-testid="details">
-      {isFetching ? (
+      {isLoading ? (
         <div className="details-loader-container">
           <Loader />
         </div>

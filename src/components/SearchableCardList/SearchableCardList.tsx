@@ -10,14 +10,16 @@ import {
   useLocation,
   useSearchParams,
 } from 'react-router-dom';
-import { useAppSelector } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { useSearchCardsQuery } from '../../services/pokemonCardsApi';
+import { setMainLoading } from '../../store/loadingSlice';
+import { setTotalCount } from '../../store/paginationSlice';
 
 export default function SearchableCardList() {
   const searchQuery = useAppSelector((state) => state.search.searchQuery);
   const itemsPerPage = useAppSelector((state) => state.pagination.itemsPerPage);
-
   const currentPage = useAppSelector((state) => state.pagination.page);
+  const dispatch = useAppDispatch();
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -42,8 +44,14 @@ export default function SearchableCardList() {
     name: searchQuery,
   });
 
+  useEffect(() => {
+    dispatch(setMainLoading(isFetching));
+    dispatch(setTotalCount(Number(response?.totalCount)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response, isFetching]);
+
   const list = response?.data || [];
-  const totalCount = Number(response?.totalCount);
+  const isLoading = useAppSelector((state) => state.loading.mainLoading);
 
   const leftSectionContent = (
     <div className="left-section">
@@ -51,7 +59,7 @@ export default function SearchableCardList() {
         <h1 className="title">Pokémon cards</h1>
         <SearchInput />
       </div>
-      {isFetching ? (
+      {isLoading ? (
         <div className="cards-loader-container">
           <Loader />
         </div>
@@ -61,7 +69,7 @@ export default function SearchableCardList() {
             <CardList list={list} />
           </div>
           <div className="pagination-section">
-            <Pagination totalCount={totalCount} />
+            <Pagination />
           </div>
         </>
       )}

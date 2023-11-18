@@ -2,6 +2,8 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import searchReducer from './searchSlice';
 import { pokemonCardsApi } from '../services/pokemonCardsApi';
 import paginationReducer from './paginationSlice';
+import loadingReducer from './loadingSlice';
+
 import {
   persistStore,
   persistReducer,
@@ -17,6 +19,7 @@ import storage from 'redux-persist/lib/storage';
 const rootReducer = combineReducers({
   search: searchReducer,
   pagination: paginationReducer,
+  loading: loadingReducer,
   [pokemonCardsApi.reducerPath]: pokemonCardsApi.reducer,
 });
 

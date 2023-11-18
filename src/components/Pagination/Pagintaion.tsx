@@ -4,11 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { setItemsPerPage, setPage } from '../../store/paginationSlice';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-type PaginationProps = {
-  totalCount: number;
-};
-
-export default function Pagination({ totalCount }: PaginationProps) {
+export default function Pagination() {
   const dispatch = useAppDispatch();
 
   const changePageSize = (query: string) => dispatch(setItemsPerPage(query));
@@ -16,6 +12,7 @@ export default function Pagination({ totalCount }: PaginationProps) {
 
   const page = useAppSelector((state) => state.pagination.page);
   const itemsPerPage = useAppSelector((state) => state.pagination.itemsPerPage);
+  const totalCount = useAppSelector((state) => state.pagination.totalCount);
 
   const navigate = useNavigate();
 
