@@ -1,4 +1,4 @@
-export const fakeCardList = [
+export const mockCardList = [
   {
     id: 'smp-SM112',
     name: "Ash's Pikachu",
@@ -62,13 +62,13 @@ export const fakeCardList = [
   },
 ];
 
-export const fakePaginationData = {
+export const mockPaginationData = {
   page: 5,
   pageSize: 4,
   totalCount: 100,
 };
 
-export const fakeQueryParams = [
+export const mockQueryParams = [
   { key: 'pageSize', value: '4' },
   { key: 'page', value: '1' },
   { key: 'q', value: 'pok' },

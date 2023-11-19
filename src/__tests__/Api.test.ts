@@ -1,5 +1,5 @@
 import { getQueryString } from '../Api';
-import { fakeQueryParams as queryParams } from '../__mocks__/FakeData';
+import { mockQueryParams as queryParams } from '../__mocks__/FakeData';
 
 describe('Api', () => {
   test('get query string', async () => {

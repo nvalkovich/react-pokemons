@@ -23,7 +23,7 @@ export default function Pagination() {
     navigate({ search: searchParams.toString() });
   };
 
-  const onPageSizeChangeInternal = (event: ChangeEvent<HTMLSelectElement>) => {
+  const onPageSizeChange = (event: ChangeEvent<HTMLSelectElement>) => {
     changePageSize(event.target?.value);
     changePage('1');
     setPageToQueryParams();
@@ -43,7 +43,7 @@ export default function Pagination() {
     <>
       <div className="page-size-select">
         <p>Cards per page:</p>
-        <select value={itemsPerPage} onChange={onPageSizeChangeInternal}>
+        <select value={itemsPerPage} onChange={onPageSizeChange}>
           <option value={4}>4</option>
           <option value={8}>8</option>
           <option value={12}>12</option>

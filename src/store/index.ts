@@ -1,4 +1,8 @@
-import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import {
+  configureStore,
+  combineReducers,
+  PreloadedState,
+} from '@reduxjs/toolkit';
 import searchReducer from './searchSlice';
 import { pokemonCardsApi } from '../services/pokemonCardsApi';
 import paginationReducer from './paginationSlice';
@@ -16,7 +20,7 @@ import {
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
   search: searchReducer,
   pagination: paginationReducer,
   loading: loadingReducer,
@@ -26,25 +30,30 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: [pokemonCardsApi.reducerPath],
+  blacklist: [pokemonCardsApi.reducerPath, 'search'],
 };
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+export const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-const store = configureStore({
-  reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }).concat(pokemonCardsApi.middleware),
-});
+export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
+  return configureStore({
+    reducer: persistedReducer,
+    preloadedState,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: {
+          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        },
+      }).concat(pokemonCardsApi.middleware),
+  });
+};
+
+const store = setupStore({});
 
 export default store;
 
 export const persistor = persistStore(store);
 
-export type RootState = ReturnType<typeof store.getState>;
-
-export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof rootReducer>;
+export type AppStore = ReturnType<typeof setupStore>;
+export type AppDispatch = AppStore['dispatch'];
