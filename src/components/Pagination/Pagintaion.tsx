@@ -16,27 +16,29 @@ export default function Pagination() {
 
   const navigate = useNavigate();
 
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const setPageToQueryParams = () => {
-    searchParams.set('page', page.toString());
+  const setPageToQueryParams = (currentPage: number) => {
+    setSearchParams({
+      page: currentPage.toString(),
+    });
     navigate({ search: searchParams.toString() });
   };
 
   const onPageSizeChange = (event: ChangeEvent<HTMLSelectElement>) => {
     changePageSize(event.target?.value);
     changePage('1');
-    setPageToQueryParams();
+    setPageToQueryParams(1);
   };
 
   const handlePrevClick = () => {
     changePage((+page - 1).toString());
-    setPageToQueryParams();
+    setPageToQueryParams(+page - 1);
   };
 
   const handleNextClick = () => {
     changePage((+page + 1).toString());
-    setPageToQueryParams();
+    setPageToQueryParams(+page + 1);
   };
 
   return (

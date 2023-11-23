@@ -1,12 +1,16 @@
 import 'whatwg-fetch';
 import '@testing-library/jest-dom';
-import { screen } from '@testing-library/react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { act, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import Pagination from '../../components/Pagination';
 import { useState } from 'react';
-import { mockPaginationData } from '../../__mocks__/FakeData';
 import { renderWithProviders } from '../../test-utils';
+import { setupStore } from '../../store';
+import { setPage, setTotalCount } from '../../store/paginationSlice';
+
+const store = setupStore();
+store.dispatch(setTotalCount(20));
 
 let mockSearchParam = '';
 
@@ -24,24 +28,29 @@ jest.mock('react-router-dom', () => ({
   },
 }));
 
-const page = mockPaginationData.page;
-
-describe.skip('the pagination component updates URL query parameter when page changes', () => {
+describe('the pagination component updates URL query parameter when page changes', () => {
   beforeEach(() => {
     renderWithProviders(
-      <Router>
+      <MemoryRouter>
         <Pagination />
-      </Router>
+      </MemoryRouter>,
+      { store }
     );
   });
 
   test('next page click', async () => {
     await userEvent.click(screen.getByTestId('button-next-page'));
-    expect(mockSearchParam).toContain(`page=${page + 1}`);
+    const queryString = new URLSearchParams(mockSearchParam).toString();
+    expect(queryString).toContain('page=2');
   });
 
   test('prev page click', async () => {
+    act(() => {
+      store.dispatch(setPage(2));
+    });
+
     await userEvent.click(screen.getByTestId('button-prev-page'));
-    expect(mockSearchParam).toContain(`page=${page - 1}`);
+    const queryString = new URLSearchParams(mockSearchParam).toString();
+    expect(queryString).toContain('page=1');
   });
 });

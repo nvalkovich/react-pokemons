@@ -44,10 +44,13 @@ describe('Details loader', () => {
 
   test('clicking the close button hides the component', async () => {
     await userEvent.click(screen.getByTestId('card'));
-    expect(screen.getByTestId('details')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('close-btn')).toBeInTheDocument();
+    });
 
-    const closeBtn = await screen.findByRole('button');
-    await userEvent.click(closeBtn);
-    expect(screen.queryByTestId('details')).toBeNull();
+    await userEvent.click(screen.getByTestId('close-btn'));
+    await waitFor(() => {
+      expect(screen.queryByTestId('details')).toBeNull();
+    });
   });
 });
