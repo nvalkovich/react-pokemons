@@ -1,8 +1,8 @@
-import { getQueryString } from '../Api';
+import { getQuery } from '../services/api-helpers';
 import { mockQueryParams as queryParams } from '../__mocks__/FakeData';
 
-describe('Api', () => {
-  test('get query string', async () => {
-    expect(getQueryString(queryParams)).toBe('?pageSize=4&page=1&q=pok');
+describe('api-helpers', () => {
+  test('get url query', async () => {
+    expect(getQuery(queryParams)).toBe('?pageSize=4&page=1&q=pok');
   });
 });

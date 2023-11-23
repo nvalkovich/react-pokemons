@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { CardData } from '../types/interfaces';
-import { getQueryString } from '../Api';
+import { getQuery } from './api-helpers';
 
 type cardsByNameArgs = {
   name: string;
@@ -30,7 +30,7 @@ export const pokemonCardsApi = createApi({
   endpoints: (builder) => ({
     searchCards: builder.query<cardsResponse, cardsByNameArgs>({
       query: ({ pageSize, page, name }) => {
-        const query = getQueryString([
+        const query = getQuery([
           { key: 'pageSize', value: `${pageSize}` },
           { key: 'page', value: `${page}` },
           { key: 'q', value: `name:${name.trim().replaceAll(' ', '*')}*` },
