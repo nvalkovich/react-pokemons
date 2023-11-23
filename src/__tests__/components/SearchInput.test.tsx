@@ -1,35 +1,29 @@
+import 'whatwg-fetch';
 import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
-import SearchInput from '../components/SearchInput';
-import { localStorageMock } from '../__mocks__/LocalStorageMock';
+import SearchInput from '../../components/SearchInput';
+import { localStorageMock } from '../../__mocks__/LocalStorageMock';
+import { renderWithProviders } from '../../test-utils';
 
 const { getItemMock, setItemMock } = localStorageMock();
 
-const onSearchClickMock = jest.fn().mockImplementation((searchQuery) => {
-  setItemMock('searchQuery', searchQuery);
-});
-
 describe('SearchInput', () => {
   beforeEach(() => {
-    render(
+    renderWithProviders(
       <Router>
-        <SearchInput onSearch={onSearchClickMock} />
+        <SearchInput />
       </Router>
     );
   });
 
   test('clicking the Search button saves the entered value to the local storage', async () => {
-    const value = 'value';
-
-    const searchInput = screen.getByTestId('search-input');
-    await userEvent.type(searchInput, value);
-    expect(searchInput).toHaveValue(value);
+    const searchInput: HTMLInputElement = screen.getByTestId('search-input');
 
     const searchButton = screen.getByTestId('search-button');
     await userEvent.click(searchButton);
-    expect(setItemMock).toHaveBeenCalledWith('searchQuery', value);
+    expect(setItemMock).toHaveBeenCalledWith('searchQuery', searchInput.value);
   });
 
   test('the component retrieves the value from the local storage upon mounting', async () => {

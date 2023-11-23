@@ -1,15 +1,25 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { CardData } from '../../types/interfaces';
 import Loader from '../Loader';
 import './Details.css';
-import { getCard } from '../../Api';
+import { useGetCardByIdQuery } from '../../services/pokemonCardsApi';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { useEffect } from 'react';
+import { setDetailsLoading } from '../../store/loadingSlice';
 
 export default function Details() {
   const [searchParams] = useSearchParams();
+  const dispatch = useAppDispatch();
+
   const id = searchParams.get('id');
-  const [card, setCard] = useState<CardData | null>(null);
-  const [isFetching, setFetching] = useState(false);
+
+  const { data: response, isFetching } = useGetCardByIdQuery(id as string);
+
+  const card = response?.data;
+
+  useEffect(() => {
+    dispatch(setDetailsLoading(isFetching));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFetching]);
 
   const navigate = useNavigate();
 
@@ -18,27 +28,11 @@ export default function Details() {
     navigate({ pathname: '/', search: searchParams.toString() });
   };
 
-  useEffect(() => {
-    const search = async () => {
-      setFetching(true);
-
-      try {
-        if (!id) {
-          return;
-        }
-        const card = await getCard(id);
-        setCard(card);
-      } finally {
-        setFetching(false);
-      }
-    };
-
-    search().catch(console.error);
-  }, [id]);
+  const isLoading = useAppSelector((state) => state.loading.detailsLoading);
 
   return (
     <div data-testid="details">
-      {isFetching ? (
+      {isLoading ? (
         <div className="details-loader-container">
           <Loader />
         </div>
@@ -48,6 +42,7 @@ export default function Details() {
             {card ? (
               <div className="card-details">
                 <button
+                  data-testid="close-btn"
                   className="card-details-container__btn-close btn"
                   onClick={onCloseClick}
                 >

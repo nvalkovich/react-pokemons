@@ -1,16 +1,16 @@
+import 'whatwg-fetch';
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
-import Card from '../components/Card';
+import Card from '../../components/Card';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { MemoryRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
-import Details from '../components/Details';
-import { getCard } from '../Api';
-import { fakeCardList } from '../__mocks__/FakeData';
+import Details from '../../components/Details';
+import { mockCardList } from '../../__mocks__/FakeData';
+import { renderWithProviders } from '../../test-utils';
+import * as pokemonCardsApi from '../../services/pokemonCardsApi';
 
-const data = fakeCardList[0];
-
-jest.mock('../Api');
+const data = mockCardList[0];
 
 describe('Card render', () => {
   test('the card component renders the relevant card data', () => {
@@ -28,9 +28,7 @@ describe('Card render', () => {
 
 describe('Card interaction', () => {
   beforeEach(() => {
-    (getCard as jest.Mock).mockResolvedValue(data);
-
-    render(
+    renderWithProviders(
       <MemoryRouter>
         <Routes>
           <Route path="/" element={<Card data={data} />} />
@@ -46,7 +44,9 @@ describe('Card interaction', () => {
   });
 
   test('clicking triggers an additional API call to fetch detailed information', async () => {
+    const spyAPIcall = jest.spyOn(pokemonCardsApi, 'useGetCardByIdQuery');
+
     await userEvent.click(screen.getByTestId('card'));
-    expect(getCard).toHaveBeenCalled();
+    expect(spyAPIcall).toHaveBeenCalled();
   });
 });

@@ -1,15 +1,14 @@
 import '@testing-library/jest-dom';
-import CardList from '../components/CardList';
+import CardList from '../../components/CardList';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { StoreContext } from '../storeContext';
-import { fakeCardList as list } from '../__mocks__/FakeData';
+import { mockCardList as list } from '../../__mocks__/FakeData';
 
 describe('CardList without cards', () => {
   test('an appropriate message is displayed if no cards are present.', () => {
     render(
       <Router>
-        <CardList />
+        <CardList list={[]} />
       </Router>
     );
 
@@ -21,11 +20,7 @@ describe('CardList with cards', () => {
   beforeEach(() => {
     render(
       <Router>
-        render(
-        <StoreContext.Provider value={{ searchQuery: '', list }}>
-          <CardList />
-        </StoreContext.Provider>
-        )
+        <CardList list={list} />
       </Router>
     );
   });

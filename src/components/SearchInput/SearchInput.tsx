@@ -1,18 +1,29 @@
-import { ChangeEvent, KeyboardEvent, useContext, useEffect } from 'react';
+import { ChangeEvent, KeyboardEvent, useEffect } from 'react';
 import { useState } from 'react';
 import './SearchInput.css';
 import ErrorButton from '../ErrorButton';
-import { StoreContext } from '../../storeContext';
+import { useAppSelector } from '../../store/hooks';
+import { search } from '../../store/searchSlice';
+import { useAppDispatch } from '../../store/hooks';
+import { setPage } from '../../store/paginationSlice';
 
-type SearchProps = {
-  onSearch: (query: string) => void;
-};
+const searchQueryKey = 'searchQuery';
 
-export default function SearchInput({ onSearch }: SearchProps) {
-  const { searchQuery } = useContext(StoreContext);
+export default function SearchInput() {
+  const dispatch = useAppDispatch();
+
+  const onSearch = (query: string) => {
+    dispatch(setPage('1'));
+    dispatch(search(query));
+    localStorage.setItem(searchQueryKey, query);
+  };
+
+  const searchQuery = localStorage.getItem(searchQueryKey);
+
   const validationRegExp = /^[0-9a-zA-Z\s]+$/;
 
-  const [stateValue, setStateValue] = useState(searchQuery);
+  const [stateValue, setStateValue] = useState(searchQuery || '');
+
   const [validationMessage, setValidationMessage] = useState<string | null>(
     null
   );
@@ -39,14 +50,15 @@ export default function SearchInput({ onSearch }: SearchProps) {
     onSearch(stateValue);
   };
 
+  const query = useAppSelector((state) => state.search.searchQuery);
+
   useEffect(() => {
-    const query = localStorage.getItem('searchQuery');
     if (query && query.length) {
       setStateValue(query);
       onSearch(query);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [query]);
 
   return (
     <div className="search-container">

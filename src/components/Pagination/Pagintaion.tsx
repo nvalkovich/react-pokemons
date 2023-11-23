@@ -1,38 +1,51 @@
 import { ChangeEvent } from 'react';
 import './Pagination.css';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { setItemsPerPage, setPage } from '../../store/paginationSlice';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
-type PaginationProps = {
-  page: number;
-  pageSize: number;
-  totalCount: number;
-  onPageChange: (page: number) => void;
-  onPageSizeChange: (pageSize: number) => void;
-};
+export default function Pagination() {
+  const dispatch = useAppDispatch();
 
-export default function Pagination({
-  page,
-  pageSize,
-  totalCount,
-  onPageChange,
-  onPageSizeChange,
-}: PaginationProps) {
-  const onPageSizeChangeInternal = (event: ChangeEvent<HTMLSelectElement>) => {
-    onPageSizeChange(+event.target?.value);
+  const changePageSize = (query: string) => dispatch(setItemsPerPage(query));
+  const changePage = (query: string) => dispatch(setPage(query));
+
+  const page = useAppSelector((state) => state.pagination.page);
+  const itemsPerPage = useAppSelector((state) => state.pagination.itemsPerPage);
+  const totalCount = useAppSelector((state) => state.pagination.totalCount);
+
+  const navigate = useNavigate();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const setPageToQueryParams = (currentPage: number) => {
+    setSearchParams({
+      page: currentPage.toString(),
+    });
+    navigate({ search: searchParams.toString() });
+  };
+
+  const onPageSizeChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    changePageSize(event.target?.value);
+    changePage('1');
+    setPageToQueryParams(1);
   };
 
   const handlePrevClick = () => {
-    onPageChange(page - 1);
+    changePage((+page - 1).toString());
+    setPageToQueryParams(+page - 1);
   };
 
   const handleNextClick = () => {
-    onPageChange(page + 1);
+    changePage((+page + 1).toString());
+    setPageToQueryParams(+page + 1);
   };
 
   return (
     <>
       <div className="page-size-select">
         <p>Cards per page:</p>
-        <select value={pageSize} onChange={onPageSizeChangeInternal}>
+        <select value={itemsPerPage} onChange={onPageSizeChange}>
           <option value={4}>4</option>
           <option value={8}>8</option>
           <option value={12}>12</option>
@@ -53,7 +66,7 @@ export default function Pagination({
         <button
           data-testid="button-next-page"
           className="arrow"
-          disabled={page >= Math.ceil(totalCount / pageSize)}
+          disabled={page >= Math.ceil(totalCount / itemsPerPage)}
           onClick={handleNextClick}
         >
           &gt;

@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import SearchInput from '../SearchInput';
 import CardList from '../CardList';
-import { CardData } from '../../types/interfaces';
 import Loader from '../Loader';
 import './SearchableCardList.css';
 import Pagination from '../Pagination';
@@ -11,94 +10,66 @@ import {
   useLocation,
   useSearchParams,
 } from 'react-router-dom';
-import { StoreContext } from '../../storeContext';
-import { searchCardsByName } from '../../Api';
-
-const searchQueryKey = 'searchQuery';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { useSearchCardsQuery } from '../../services/pokemonCardsApi';
+import { setMainLoading } from '../../store/loadingSlice';
+import { setTotalCount } from '../../store/paginationSlice';
 
 export default function SearchableCardList() {
-  const [searchQuery, setSearchQuery] = useState(
-    localStorage.getItem(searchQueryKey) || ''
-  );
-  const [isFetching, setFetching] = useState(false);
-  const [list, setList] = useState<CardData[]>([]);
+  const searchQuery = useAppSelector((state) => state.search.searchQuery);
+  const itemsPerPage = useAppSelector((state) => state.pagination.itemsPerPage);
+  const currentPage = useAppSelector((state) => state.pagination.page);
+  const dispatch = useAppDispatch();
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const page = +(searchParams.get('page') ?? '1');
 
   useEffect(() => {
-    searchParams.set('page', page.toString());
+    searchParams.set('page', currentPage.toString());
     setSearchParams(searchParams);
-  }, [page, searchParams, setSearchParams]);
-
-  const [pageSize, setPageSize] = useState(20);
-  const [totalCount, setTotalCount] = useState(0);
+  }, [currentPage, searchParams, setSearchParams]);
 
   const navigate = useNavigate();
 
   const location = useLocation();
   const isShaded = location.pathname === '/details';
 
-  const handleSearch = (query: string) => {
-    localStorage.setItem(searchQueryKey, query);
-    setSearchQuery(query);
-    setSearchParams({ page: '1' });
-  };
-
-  const onPageChange = (page: number) => {
-    searchParams.set('page', page.toString());
-    navigate({ search: searchParams.toString() });
-  };
-
-  const onPageSizeChange = (pageSize: number) => {
-    setPageSize(pageSize);
-    setSearchParams({ page: '1' });
-  };
-
   const onWrapperClick = () => {
     searchParams.delete('id');
     navigate({ pathname: '/', search: searchParams.toString() });
   };
 
+  const { data: response, isFetching } = useSearchCardsQuery({
+    pageSize: itemsPerPage,
+    page: currentPage,
+    name: searchQuery,
+  });
+
   useEffect(() => {
-    const search = async () => {
-      setFetching(true);
+    dispatch(setMainLoading(isFetching));
+    dispatch(setTotalCount(Number(response?.totalCount)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response, isFetching]);
 
-      try {
-        const cards = await searchCardsByName(searchQuery, page, pageSize);
-        setList(cards.data);
-        setTotalCount(cards.totalCount);
-      } finally {
-        setFetching(false);
-      }
-    };
-
-    search().catch(console.error);
-  }, [searchQuery, page, pageSize]);
+  const list = response?.data || [];
+  const isLoading = useAppSelector((state) => state.loading.mainLoading);
 
   const leftSectionContent = (
     <div className="left-section">
       <div className="search-section">
         <h1 className="title">Pokémon cards</h1>
-        <SearchInput onSearch={handleSearch} />
+        <SearchInput />
       </div>
-      {isFetching ? (
+      {isLoading ? (
         <div className="cards-loader-container">
           <Loader />
         </div>
       ) : (
         <>
           <div className="cards-section">
-            <CardList />
+            <CardList list={list} />
           </div>
           <div className="pagination-section">
-            <Pagination
-              page={page}
-              pageSize={pageSize}
-              totalCount={totalCount}
-              onPageChange={onPageChange}
-              onPageSizeChange={onPageSizeChange}
-            />
+            <Pagination />
           </div>
         </>
       )}
@@ -106,19 +77,17 @@ export default function SearchableCardList() {
   );
 
   return (
-    <StoreContext.Provider value={{ searchQuery, list }}>
-      <>
-        {isShaded ? (
-          <div className="shaded-wrapper" onClick={onWrapperClick}>
-            {leftSectionContent}
-          </div>
-        ) : (
-          leftSectionContent
-        )}
-        <div className="right-section">
-          <Outlet />
+    <>
+      {isShaded ? (
+        <div className="shaded-wrapper" onClick={onWrapperClick}>
+          {leftSectionContent}
         </div>
-      </>
-    </StoreContext.Provider>
+      ) : (
+        leftSectionContent
+      )}
+      <div className="right-section">
+        <Outlet />
+      </div>
+    </>
   );
 }

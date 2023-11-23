@@ -1,10 +1,11 @@
+import 'whatwg-fetch';
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import { Route, Routes } from 'react-router-dom';
 import { MemoryRouter } from 'react-router-dom';
-import Details from '../components/Details';
-import NotFoundPage from '../components/NotFoundPage';
-import SearchableCardList from '../components/SearchableCardList';
+import Details from '../../components/Details';
+import NotFoundPage from '../../components/NotFoundPage';
+import SearchableCardList from '../../components/SearchableCardList';
 
 describe('PageNotFound', () => {
   test('404 page is displayed when navigating to an invalid route', () => {
