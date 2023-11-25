@@ -1,0 +1,20 @@
+.page_size_select {
+  display: flex;
+  gap: 10px;
+}
+
+.page_btns {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.arrow {
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  background-color: rgb(241, 241, 241);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
