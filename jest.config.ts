@@ -1,4 +1,11 @@
-export default {
+import nextJest from 'next/jest.js';
+
+const createJestConfig = nextJest({
+  dir: './',
+});
+
+/** @type {import('jest').Config} */
+const config = {
   preset: 'ts-jest',
   clearMocks: true,
   testEnvironment: 'jest-environment-jsdom',
@@ -9,4 +16,7 @@ export default {
   moduleNameMapper: {
     '\\.(gif|ttf|eot|svg|png)$': '<rootDir>/test/__ mocks __/fileMock.ts',
   },
+  collectCoverageFrom: ['**/*.{ts,tsx}', '!**/jest.config.ts'],
 };
+
+export default createJestConfig(config);

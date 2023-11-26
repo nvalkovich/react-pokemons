@@ -1,0 +1,28 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 415px;
+  min-width: 260px;
+  padding: 5px 7px;
+  gap: 5px;
+  background-color: rgba(241, 241, 241, 0.7);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.title {
+  text-align: center;
+}
+
+.details_list {
+  padding-top: 20px;
+  font-size: 12px;
+  position: absolute;
+  bottom: 5px;
+  left: 7px;
+}
+
+.list_item {
+  list-style-type: none;
+}
