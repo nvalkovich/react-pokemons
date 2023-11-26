@@ -18,7 +18,7 @@ export default function Card({ data }: CardProps) {
   };
 
   return (
-    <div className={styles.card} onClick={onCardClick}>
+    <div data-testid="card" className={styles.card} onClick={onCardClick}>
       <p className={styles.title}>{data.name}</p>
       <Image
         src={data.images.small}

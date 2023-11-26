@@ -15,15 +15,15 @@ export default function SearchableCardList({
 }: SearchableCardListProps) {
   return (
     <>
-      <div className="main-section">
-        <div className={styles.search}>
+      <div className="main-section" data-testid="main-section">
+        <div className={styles.search} data-testid="search-section">
           <h1 className="title">Pokémon cards</h1>
           <SearchInput />
         </div>
-        <div className={styles.cards}>
+        <div className={styles.cards} data-testid="cards-section">
           <CardList list={list} />
         </div>
-        <div className={styles.pagination}>
+        <div className={styles.pagination} data-testid="pagination-section">
           <Pagination totalCount={totalCount} />
         </div>
       </div>

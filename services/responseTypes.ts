@@ -8,7 +8,7 @@ interface Response {
 }
 
 export interface CardListResponse extends Response {
-  data: CardData[];
+  data: CardData[] | [];
 }
 
 export interface CardResponse extends Response {

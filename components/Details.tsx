@@ -18,7 +18,7 @@ export default function Details({ card }: DetailsProps) {
   };
 
   return (
-    <div className="details-section">
+    <div className="details-section" data-testid="details-section">
       <div data-testid="details">
         <>
           <div className={styles.container}>

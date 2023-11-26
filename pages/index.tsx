@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import type { InferGetServerSidePropsType, GetServerSideProps } from 'next';
+import type { GetServerSideProps } from 'next';
 import { wrapper } from '@/store/store';
 import {
   searchCards,
@@ -18,45 +18,45 @@ const defaultSearchQuery = {
   pageSize: '12',
 };
 
-export const getServerSideProps: GetServerSideProps<{
+export type HomePageProps = {
   cardsData: CardListResponse;
   detailedCardData: CardResponse | null;
-}> = wrapper.getServerSideProps((store) => async (context) => {
-  const searchQuery = {
-    ...defaultSearchQuery,
-    ...context.query,
-  };
+};
 
-  const { details } = context.query;
+export const getServerSideProps: GetServerSideProps<HomePageProps> =
+  wrapper.getServerSideProps((store) => async (context) => {
+    const searchQuery = {
+      ...defaultSearchQuery,
+      ...context.query,
+    };
 
-  let cards = null;
-  let cardDetails = null;
+    const { details } = context.query;
 
-  if (
-    typeof searchQuery.page === 'string' &&
-    typeof searchQuery.pageSize === 'string'
-  ) {
-    cards = await store.dispatch(searchCards.initiate(searchQuery));
-  }
+    let cards = null;
+    let cardDetails = null;
 
-  if (typeof details === 'string') {
-    cardDetails = await store.dispatch(getCardById.initiate(details));
-  }
+    if (
+      typeof searchQuery.page === 'string' &&
+      typeof searchQuery.pageSize === 'string'
+    ) {
+      cards = await store.dispatch(searchCards.initiate(searchQuery));
+    }
 
-  await Promise.all(store.dispatch(getRunningQueriesThunk()));
+    if (typeof details === 'string') {
+      cardDetails = await store.dispatch(getCardById.initiate(details));
+    }
 
-  return {
-    props: {
-      cardsData: cards?.data as CardListResponse,
-      detailedCardData: details ? (cardDetails?.data as CardResponse) : null,
-    },
-  };
-});
+    await Promise.all(store.dispatch(getRunningQueriesThunk()));
 
-export default function Home({
-  cardsData,
-  detailedCardData,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+    return {
+      props: {
+        cardsData: cards?.data as CardListResponse,
+        detailedCardData: details ? (cardDetails?.data as CardResponse) : null,
+      },
+    };
+  });
+
+export default function Home({ cardsData, detailedCardData }: HomePageProps) {
   const isShaded = Boolean(detailedCardData);
   const list = cardsData?.data || [];
   const totalCount = cardsData?.totalCount || 0;

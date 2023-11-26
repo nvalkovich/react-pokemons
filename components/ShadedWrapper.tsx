@@ -17,7 +17,11 @@ export default function ShadedWrapper({ children }: LayoutProps) {
 
   return (
     <>
-      <div className={styles.shaded_wrapper} onClick={removeShadedWrapper}>
+      <div
+        className={styles.shaded_wrapper}
+        data-testid="shaded-wrapper"
+        onClick={removeShadedWrapper}
+      >
         {children}
       </div>
     </>
