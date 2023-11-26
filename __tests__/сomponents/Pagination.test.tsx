@@ -7,10 +7,10 @@ import mockRouter from 'next-router-mock';
 
 jest.mock('next/router', () => jest.requireActual('next-router-mock'));
 
-const page = 3;
-const totalCount = 500;
-
 describe('the pagination component updates URL query parameter when page changes', () => {
+  const page = 3;
+  const totalCount = 500;
+
   beforeEach(() => {
     mockRouter.push({ query: { page: `${page}` } });
 
