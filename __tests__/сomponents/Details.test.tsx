@@ -3,16 +3,18 @@ import { render, screen } from '@testing-library/react';
 import Details from '@/components/Details';
 import userEvent from '@testing-library/user-event';
 import { mockCardList } from '@/__mocks__/MockData';
-import { createMockRouter } from '@/__mocks__/MockRouter';
 import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
+import mockRouter from 'next-router-mock';
+
+jest.mock('next/router', () => jest.requireActual('next-router-mock'));
 
 const data = mockCardList[0];
-const router = createMockRouter({ query: { details: `${data.id}` } });
 
 describe('Details loader', () => {
   beforeEach(() => {
+    mockRouter.push({ query: { details: `${data.id}` } });
     render(
-      <RouterContext.Provider value={router}>
+      <RouterContext.Provider value={mockRouter}>
         <Details card={data} />
       </RouterContext.Provider>
     );
@@ -31,8 +33,8 @@ describe('Details loader', () => {
   });
 
   test('clicking the close button hides the component', async () => {
-    expect(router.query.details).toBe(data.id);
+    expect(mockRouter.query.details).toBe(data.id);
     await userEvent.click(screen.getByTestId('close-btn'));
-    expect(router.query.details).toBe(undefined);
+    expect(mockRouter.query.details).toBe(undefined);
   });
 });

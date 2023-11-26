@@ -2,17 +2,20 @@ import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Pagination from '@/components/Pagination';
-import { createMockRouter } from '@/__mocks__/MockRouter';
 import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
+import mockRouter from 'next-router-mock';
+
+jest.mock('next/router', () => jest.requireActual('next-router-mock'));
 
 const page = 3;
 const totalCount = 500;
-const router = createMockRouter({ query: { page: `${page}` } });
 
 describe('the pagination component updates URL query parameter when page changes', () => {
   beforeEach(() => {
+    mockRouter.push({ query: { page: `${page}` } });
+
     render(
-      <RouterContext.Provider value={router}>
+      <RouterContext.Provider value={mockRouter}>
         <Pagination totalCount={totalCount} />
       </RouterContext.Provider>
     );
@@ -21,18 +24,12 @@ describe('the pagination component updates URL query parameter when page changes
   test('next page click', async () => {
     await userEvent.click(screen.getByTestId('button-next-page'));
     const nextPage = page + 1;
-    expect(router.push).toHaveBeenCalledWith({
-      pathname: '/',
-      query: { page: nextPage },
-    });
+    expect(mockRouter.query.page).toBe(nextPage);
   });
 
   test('prev page click', async () => {
     await userEvent.click(screen.getByTestId('button-prev-page'));
     const prevPage = page - 1;
-    expect(router.push).toHaveBeenCalledWith({
-      pathname: '/',
-      query: { page: prevPage },
-    });
+    expect(mockRouter.query.page).toBe(prevPage);
   });
 });

@@ -2,15 +2,15 @@ import '@testing-library/jest-dom';
 import CardList from '@/components/CardList';
 import { render, screen } from '@testing-library/react';
 import { mockCardList as list } from '@/__mocks__/MockData';
-import { createMockRouter } from '@/__mocks__/MockRouter';
 import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
+import mockRouter from 'next-router-mock';
 
-const router = createMockRouter({});
+jest.mock('next/router', () => jest.requireActual('next-router-mock'));
 
 describe('CardList without cards', () => {
   test('an appropriate message is displayed if no cards are present.', () => {
     render(
-      <RouterContext.Provider value={router}>
+      <RouterContext.Provider value={mockRouter}>
         <CardList list={[]} />
       </RouterContext.Provider>
     );
@@ -22,7 +22,7 @@ describe('CardList without cards', () => {
 describe('CardList with cards', () => {
   beforeEach(() => {
     render(
-      <RouterContext.Provider value={router}>
+      <RouterContext.Provider value={mockRouter}>
         <CardList list={list} />
       </RouterContext.Provider>
     );
