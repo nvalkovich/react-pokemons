@@ -10,7 +10,7 @@ jest.mock('next/router', () => jest.requireActual('next-router-mock'));
 
 const data = mockCardList[0];
 
-describe('Details loader', () => {
+describe('details loader', () => {
   beforeEach(() => {
     mockRouter.push({ query: { details: `${data.id}` } });
     render(
@@ -32,7 +32,7 @@ describe('Details loader', () => {
     expect(screen.getByText(data.flavorText)).toBeInTheDocument();
   });
 
-  test('clicking the close button hides the component', async () => {
+  test('clicking the close button remove details from search params', async () => {
     expect(mockRouter.query.details).toBe(data.id);
     await userEvent.click(screen.getByTestId('close-btn'));
     expect(mockRouter.query.details).toBe(undefined);

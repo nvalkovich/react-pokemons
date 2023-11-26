@@ -33,7 +33,7 @@ describe('Card interaction', () => {
     );
   });
 
-  test('clicking on a card opens a detailed card component', async () => {
+  test('Clicking on a card opens a detailed card component', async () => {
     const card = screen.getByTestId('card');
     await userEvent.click(card);
 

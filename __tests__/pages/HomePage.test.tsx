@@ -13,12 +13,12 @@ import { mockCardList } from '@/__mocks__/MockData';
 
 const cardData = mockCardList[0];
 
-describe('SearchableCardList', () => {
+describe('HomePage', () => {
   const page = '1';
   const pageSize = '4';
   const details = cardData.id;
 
-  it('renders correctly with cardListData', async () => {
+  it('renders correctly without detailedCardData', async () => {
     const context = {
       query: { page, pageSize } as ParsedUrlQuery,
     };
