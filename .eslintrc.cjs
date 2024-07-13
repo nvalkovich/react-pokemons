@@ -1,9 +1,11 @@
 module.exports = {
   root: true,
   extends: [
+    'next',
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
+    'plugin:@next/next/recommended',
     'prettier',
   ],
   parser: '@typescript-eslint/parser',

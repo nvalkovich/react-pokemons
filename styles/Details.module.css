@@ -1,0 +1,39 @@
+.container {
+  width: 500px;
+  background-color: rgba(241, 241, 241, 0.7);
+  height: 100vh;
+  position: relative;
+}
+
+.details_container {
+  padding: 20px 40px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 5px;
+}
+
+.name {
+  font-size: 30px;
+  font-weight: 500;
+}
+
+.category {
+  font-weight: 600;
+}
+
+.details_list {
+  padding: 20px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.image {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.description {
+  padding: 20px 30px;
+  font-size: 13px;
+}
